@@ -14,4 +14,8 @@ public class ExampleUnitTest {
     public void addition_isCorrect() {
         assertEquals(4, 2 + 2);
     }
+    public void Student_IsCreated() {
+        Student testStudent = new Student("Venky");
+        assertEquals(testStudent.name, "Venky");
+    }
 }
