@@ -19,4 +19,9 @@ public class ExampleUnitTest {
         Student testStudent = new Student("Venky");
         assertEquals(testStudent.name, "Venky");
     }
+
+    @Test
+    public void Classes_IsCreated() {
+
+    }
 }

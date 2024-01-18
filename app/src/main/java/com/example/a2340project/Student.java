@@ -5,7 +5,7 @@ public class Student {
     public Student(String name) {
         this.name = name;
     }
-    public Student(String name, ToDoList list, Settings settings, Classes[] classList) {
+    public Student(String name, ToDoList list, Settings settings, Course[] courseList) {
         this.name = name;
     }
 }
