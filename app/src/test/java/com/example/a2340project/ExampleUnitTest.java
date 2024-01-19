@@ -1,7 +1,7 @@
 package com.example.a2340project;
 
 import org.junit.Test;
-
+import java.util.Date;
 import static org.junit.Assert.*;
 
 /**
@@ -23,5 +23,23 @@ public class ExampleUnitTest {
     @Test
     public void Classes_IsCreated() {
 
+    }
+    @Test
+    public void Task_IsCreated() {
+        Date date = new Date();
+        Task testTask = new Task("Workout", date, "Workout 5 times");
+        assertEquals(testTask.title, "Workout");
+        assertEquals(testTask.dueDate, date);
+        assertEquals(testTask.description, "Workout 5 times");
+    }
+    @Test
+    public void ToDoList_IsCreated() {
+        Date date = new Date();
+        Task testTask = new Task("Workout", date, "Workout 5 times");
+        ToDoList testList = new ToDoList();
+        testList.addTask(testTask);
+        System.out.println(testList.returnList());
+        testList.removeTask(testTask);
+        System.out.println(testList.returnList());
     }
 }
