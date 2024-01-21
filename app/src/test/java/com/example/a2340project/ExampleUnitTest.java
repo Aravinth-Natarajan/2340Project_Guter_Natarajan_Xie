@@ -1,6 +1,8 @@
 package com.example.a2340project;
 
 import org.junit.Test;
+
+import java.time.DayOfWeek;
 import java.util.Date;
 import static org.junit.Assert.*;
 
@@ -21,8 +23,17 @@ public class ExampleUnitTest {
     }
 
     @Test
-    public void Classes_IsCreated() {
-
+    public void ClassTime_IsCreated() {
+        ClassTime testClassTime = new ClassTime();
+        assertEquals(testClassTime.getTime(), "12:30");
+        assertEquals(testClassTime.getDay(), DayOfWeek.MONDAY);
+        assertEquals(testClassTime.getDuration(), 50);
+        assertEquals(testClassTime.toString(), "MONDAY 12:30 50 minutes");
+    }
+    @Test
+    public void Course_IsCreated() {
+        Course testCourse = new Course("CS 2340");
+        assertEquals(testCourse.getName(), "CS 2340");
     }
     @Test
     public void Task_IsCreated() {
