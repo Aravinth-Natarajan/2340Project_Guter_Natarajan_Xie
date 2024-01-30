@@ -12,8 +12,6 @@ public class Course {
 
     private String section;
     private String instructor;
-    private List<Exam> exams;
-    private List<Assignment> assignments;
 
     public Course(String name) {
         this(name, new ArrayList<ClassTime>(), "Unknown", "Unknown", "Unknown");
@@ -25,12 +23,6 @@ public class Course {
         this.location = location;
         this.instructor = instructor;
         this.section = section;
-    }
-    public Course(String name, List<ClassTime> classTimes, String location,
-                  String instructor, List<Exam> exams, List<Assignment> assignments, String section) {
-        this(name, classTimes, location, instructor, section);
-        this.exams = exams;
-        this.assignments = assignments;
     }
 
     public String getName() {
@@ -49,12 +41,5 @@ public class Course {
         return this.instructor;
     }
 
-    public List<Exam> getExams() {
-        return this.exams;
-    }
-
-    public List<Assignment> getAssignments() {
-        return this.assignments;
-    }
 
 }

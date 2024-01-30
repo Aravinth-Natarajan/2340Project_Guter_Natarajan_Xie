@@ -1,38 +1,27 @@
 package com.example.a2340project;
 import java.util.Date;
 
-public class Exam {
-    private Date dueDate;
-    private String detail;
+public class Exam extends Task{
     private String location;
+    private Course course;
 
-    private String name;
-
-    public Exam(Date dueDate, String location, String detail, String name) {
-        this.dueDate = dueDate;
-        this.detail = detail;
+    public Exam(Date dueDate, String location, String description, String title, Course course) {
+        super(title, dueDate, description);
         this.location = location;
-        this.name = name;
+        this.course = course;
     }
 
-    public Exam(Date dueDate, String location) {
-        this(dueDate, location, "", "");
+    public Exam(Date dueDate, String location, Course course) {
+        this(dueDate, location, "", "", course);
     }
 
-    public Date getDueDate() {
-        return dueDate;
-    }
 
     public String getLocation() {
         return location;
     }
 
-    public String getDetail() {
-        return detail;
-    }
-
-    public String getName() {
-        return name;
+    public Course getCourse() {
+        return course;
     }
 
 }

@@ -2,44 +2,22 @@ package com.example.a2340project;
 
 import java.util.Date;
 
-public class Assignment {
-    private Date dueDate;
-    private String detail;
-    private String title;
+public class Assignment extends Task{
+    private Course course;
 
-    private boolean completed = false;
 
-    public Assignment(Date dueDate, String detail, String title) {
-        this.dueDate = dueDate;
-        this.detail = detail;
-        this.title = title;
+    public Assignment(Date dueDate, String description, String title, Course course) {
+        super(title, dueDate, description);
+        this.course = course;
     }
 
-    public Assignment(Date dueDate, String title) {
-        this(dueDate, title, "");
+    public Assignment(Date dueDate, Course course) {
+        this(dueDate, "", "", course);
     }
 
-    public Assignment(Date dueDate) {
-        this(dueDate, "");
+    public Course getCourse() {
+        return course;
     }
 
-    public Date getDueDate() {
-        return dueDate;
-    }
 
-    public String getDetail() {
-        return detail;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void finishAssignment() {
-        this.completed = true;
-    }
-
-    public boolean getCompleted() {
-        return this.completed;
-    }
 }

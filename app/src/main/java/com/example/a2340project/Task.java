@@ -26,5 +26,19 @@ public class Task {
         return this.check;
     }
 
+    public String getTitle() {
+        return title;
+    }
 
+    public Date getDueDate() {
+        return dueDate;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getUniqueID() {
+        return uniqueID;
+    }
 }
