@@ -7,6 +7,8 @@ public class Assignment {
     private String detail;
     private String title;
 
+    private boolean completed = false;
+
     public Assignment(Date dueDate, String detail, String title) {
         this.dueDate = dueDate;
         this.detail = detail;
@@ -31,5 +33,13 @@ public class Assignment {
 
     public String getTitle() {
         return title;
+    }
+
+    public void finishAssignment() {
+        this.completed = true;
+    }
+
+    public boolean getCompleted() {
+        return this.completed;
     }
 }

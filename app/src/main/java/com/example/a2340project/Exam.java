@@ -6,14 +6,17 @@ public class Exam {
     private String detail;
     private String location;
 
-    public Exam(Date dueDate, String location, String detail) {
+    private String name;
+
+    public Exam(Date dueDate, String location, String detail, String name) {
         this.dueDate = dueDate;
         this.detail = detail;
         this.location = location;
+        this.name = name;
     }
 
     public Exam(Date dueDate, String location) {
-        this(dueDate, location, "");
+        this(dueDate, location, "", "");
     }
 
     public Date getDueDate() {
@@ -27,4 +30,9 @@ public class Exam {
     public String getDetail() {
         return detail;
     }
+
+    public String getName() {
+        return name;
+    }
+
 }
