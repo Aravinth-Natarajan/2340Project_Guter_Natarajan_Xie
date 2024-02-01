@@ -8,11 +8,15 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
-import com.example.a2340project.databinding.FragmentFirstBinding;
+
+import com.example.a2340project.databinding.ClassesFragmentBinding;
+import com.example.a2340project.databinding.ClassesFragmentBinding;
+
+import java.util.ArrayList;
 
 public class FirstFragment extends Fragment {
 
-private FragmentFirstBinding binding;
+private ClassesFragmentBinding binding;
 
     @Override
     public View onCreateView(
@@ -20,14 +24,22 @@ private FragmentFirstBinding binding;
             Bundle savedInstanceState
     ) {
 
-      binding = FragmentFirstBinding.inflate(inflater, container, false);
-      return binding.getRoot();
+        binding = ClassesFragmentBinding.inflate(inflater, container, false);
+
+        ArrayList<Course> courses = new ArrayList<>();
+        courses.add(new Course("Test course"));
+
+        ClassListAdapter classListAdapter = new ClassListAdapter(courses);
+        binding.courseListView.setAdapter(classListAdapter);
+
+        return binding.getRoot();
 
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+/*
         binding.buttonFirst.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -35,7 +47,9 @@ private FragmentFirstBinding binding;
                         .navigate(R.id.action_FirstFragment_to_SecondFragment);
             }
         });
+*/
     }
+
 
 @Override
     public void onDestroyView() {
