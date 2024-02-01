@@ -14,7 +14,7 @@ public class Course {
     private String instructor;
 
     public Course(String name) {
-        this(name, new ArrayList<ClassTime>(), "Unknown", "Unknown", "Unknown");
+        this(name, new ArrayList<>(), "Unknown", "Unknown", "Unknown");
     }
 
     public Course(String name, List<ClassTime> classTimes, String location, String instructor, String section) {

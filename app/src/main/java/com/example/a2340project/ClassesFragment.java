@@ -7,16 +7,15 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.fragment.NavHostFragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.example.a2340project.databinding.ClassesFragmentBinding;
 import com.example.a2340project.databinding.ClassesFragmentBinding;
 
 import java.util.ArrayList;
 
-public class FirstFragment extends Fragment {
+public class ClassesFragment extends Fragment {
 
-private ClassesFragmentBinding binding;
+    private ClassesFragmentBinding binding;
 
     @Override
     public View onCreateView(
@@ -28,9 +27,12 @@ private ClassesFragmentBinding binding;
 
         ArrayList<Course> courses = new ArrayList<>();
         courses.add(new Course("Test course"));
+        courses.add(new Course("Test course 2"));
+        courses.add(new Course("Test course 3"));
 
         ClassListAdapter classListAdapter = new ClassListAdapter(courses);
         binding.courseListView.setAdapter(classListAdapter);
+        binding.courseListView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         return binding.getRoot();
 

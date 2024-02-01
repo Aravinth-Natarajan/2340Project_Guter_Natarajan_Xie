@@ -1,8 +1,8 @@
 <resources>
-    <string name="app_name">2340Project</string>
+    <string name="app_name">Test String</string>
     <string name="action_settings">Settings</string>
     <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
+    <string name="first_fragment_label">Classes</string>
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
@@ -43,4 +43,9 @@
         libero vel nunc consequat, quis tincidunt nisl eleifend. Cras bibendum enim a justo luctus
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
+    <string name="nav_drawer_user_text">Welcome\n%s</string>
+    <string name="settings_button_text">Settings</string>
+    <string name="sw_user_button_text">Switch user</string>
+    <string name="todo_list_nav_button_text">To-do</string>
+    <string name="classes_nav_button_text">Classes</string>
 </resources>

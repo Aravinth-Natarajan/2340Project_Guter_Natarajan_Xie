@@ -1,50 +1,74 @@
 package com.example.a2340project;
 
 import android.os.Bundle;
-import com.google.android.material.snackbar.Snackbar;
+
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import android.view.View;
-import androidx.core.view.WindowCompat;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
+import androidx.fragment.app.FragmentManager;
 import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
-import com.example.a2340project.databinding.ActivityMainBinding;
 
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.a2340project.databinding.ActivityMainBinding;
+
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration appBarConfiguration;
-private ActivityMainBinding binding;
+    private ActivityMainBinding binding;
+    private FragmentManager fragManager;
+    private ActionBarDrawerToggle drawerToggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-     binding = ActivityMainBinding.inflate(getLayoutInflater());
-     setContentView(binding.getRoot());
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        setSupportActionBar(binding.toolbar);
+        // set up action bar
+        setSupportActionBar(binding.mainToolbar);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        drawerToggle = new ActionBarDrawerToggle(this, binding.drawerLayout, binding.mainToolbar, R.string.app_name, R.string.app_name);
+        drawerToggle.syncState();
 
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-        appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+        // Set fragment manager and display home fragment
+        fragManager = getSupportFragmentManager();
+        fragManager.beginTransaction().replace(R.id.content_frame, new ClassesFragment()).commit();
 
-        binding.fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAnchorView(R.id.fab)
-                        .setAction("Action", null).show();
-            }
+
+//        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
+//        appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph())
+//                .setOpenableLayout(binding.drawerLayout)
+//                .build();
+////        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+//        NavigationUI.setupWithNavController(binding.mainToolbar, navController, appBarConfiguration);
+//
+//        // set up navigation drawer
+//        NavigationUI.setupWithNavController(binding.mainNavView, navController);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        binding.includeNavDrawer.classesNavButton.setOnClickListener((view) -> {
+            fragManager.beginTransaction().replace(R.id.content_frame, new ClassesFragment()).commit();
+            binding.drawerLayout.closeDrawers();
+        });
+
+        binding.includeNavDrawer.todoListNavButton.setOnClickListener((view) -> {
+            fragManager.beginTransaction().replace(R.id.content_frame, new TodoFragment()).commit();
+            binding.drawerLayout.closeDrawers();
         });
     }
-@Override
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+//        getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
@@ -63,10 +87,10 @@ private ActivityMainBinding binding;
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public boolean onSupportNavigateUp() {
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-        return NavigationUI.navigateUp(navController, appBarConfiguration)
-                || super.onSupportNavigateUp();
-    }
+//    @Override
+//    public boolean onSupportNavigateUp() {
+//        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
+//        return NavigationUI.navigateUp(navController,Ac appBarConfiguration)
+//                || super.onSupportNavigateUp();
+//    }
 }
