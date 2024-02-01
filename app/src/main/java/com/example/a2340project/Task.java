@@ -19,8 +19,8 @@ public class Task {
         this(title, null, description);
     }
 
-    public void completeTask() {
-        this.check = true;
+    public void setCompletion(boolean status) {
+        this.check = status;
     }
     public boolean getChecked() {
         return this.check;
