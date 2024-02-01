@@ -48,4 +48,9 @@
     <string name="sw_user_button_text">Switch user</string>
     <string name="todo_list_nav_button_text">To-do</string>
     <string name="classes_nav_button_text">Classes</string>
+    <string name="sort_by_classes_item_text">Class</string>
+    <string name="sort_by_due_date_item_text">Due date</string>
+    <string name="sort_by_completion_item_text">Completion</string>
+    <string name="sort_by_menu_button_text">Sort by</string>
+    <string name="show_completed_button_text">Show completed</string>
 </resources>

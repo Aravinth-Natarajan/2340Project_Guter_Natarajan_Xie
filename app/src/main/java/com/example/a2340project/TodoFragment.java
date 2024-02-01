@@ -8,11 +8,11 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.example.a2340project.databinding.FragmentSecondBinding;
+import com.example.a2340project.databinding.TodoFragmentBinding;
 
 public class TodoFragment extends Fragment {
 
-private FragmentSecondBinding binding;
+private TodoFragmentBinding binding;
 
     @Override
     public View onCreateView(
@@ -20,7 +20,7 @@ private FragmentSecondBinding binding;
             Bundle savedInstanceState
     ) {
 
-      binding = FragmentSecondBinding.inflate(inflater, container, false);
+      binding = TodoFragmentBinding.inflate(inflater, container, false);
       return binding.getRoot();
 
     }
