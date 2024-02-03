@@ -13,11 +13,17 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.a2340project.databinding.ClassesFragmentBinding;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ClassesFragment extends Fragment {
 
     private ClassesFragmentBinding binding;
     private LinearLayoutManager layoutManager;
+    private List<Course> courses;
+
+    public ClassesFragment(List<Course> courses) {
+        this.courses = courses;
+    }
 
     @Override
     public View onCreateView(
@@ -39,9 +45,14 @@ public class ClassesFragment extends Fragment {
         courses.add(new Course("Test course 2"));
         courses.add(new Course("Test course 3"));
 
-        ClassListAdapter classListAdapter = new ClassListAdapter(courses);
+        ClassListAdapter classListAdapter = new ClassListAdapter(courses, getActivity().getSupportFragmentManager());
         binding.courseListView.setAdapter(classListAdapter);
         binding.courseListView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        Bundle menuUpdate = new Bundle();
+        menuUpdate.putString("menuStateKey", "HIDE_MENU");
+        getParentFragmentManager().setFragmentResult("menuUpdateKey", menuUpdate);
+
 
         return binding.getRoot();
 

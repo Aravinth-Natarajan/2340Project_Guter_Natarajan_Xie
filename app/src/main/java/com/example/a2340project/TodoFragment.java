@@ -22,7 +22,11 @@ private TodoFragmentBinding binding;
 
 private ArrayList<Task> tasks;
 private ArrayList<Task> incompleteTasks;
+private ToDoList toDoList;
 
+    public TodoFragment(ToDoList toDoList) {
+        this.toDoList = toDoList;
+    }
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container,
@@ -34,6 +38,11 @@ private ArrayList<Task> incompleteTasks;
         // TODO: get rid of this later
         tasks = new ArrayList<>();
         incompleteTasks = new ArrayList<>();
+
+        Bundle menuUpdate = new Bundle();
+        menuUpdate.putString("menuStateKey", "HIDE_MENU");
+        getParentFragmentManager().setFragmentResult("menuUpdateKey", menuUpdate);
+
 
         return binding.getRoot();
     }

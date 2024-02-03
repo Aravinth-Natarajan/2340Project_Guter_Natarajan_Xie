@@ -4,13 +4,17 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.navigation.ui.AppBarConfiguration;
 
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.a2340project.databinding.ActivityMainBinding;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -20,6 +24,9 @@ public class MainActivity extends AppCompatActivity {
     private ActionBarDrawerToggle drawerToggle;
     private ClassesFragment activeClassesFragment;
     private TodoFragment activeTodoFragment;
+    private ArrayList<Course> courses;
+    private ToDoList toDoList;
+    private TaskbarMenuState menuState = TaskbarMenuState.HIDE_MENU;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,9 +45,22 @@ public class MainActivity extends AppCompatActivity {
 
         // Set fragment manager and display home fragment
         fragManager = getSupportFragmentManager();
-        activeClassesFragment = new ClassesFragment();
-        fragManager.beginTransaction().replace(R.id.content_frame, activeClassesFragment).commit();
+        swapToFragment(new ClassesFragment(courses));
+        setTitle(R.string.first_fragment_label);
 
+        courses = new ArrayList<>();
+
+        fragManager.setFragmentResultListener(
+                "menuUpdateKey", this,
+                (key, bundle) -> {
+                    String res = bundle.getString("menuStateKey");
+                    try {
+                        TaskbarMenuState newState = Enum.valueOf(TaskbarMenuState.class, res);
+                        setMenuState(newState);
+                    } catch (Exception e) {
+                        Log.e("Menu Update Error: ", e.getStackTrace().toString());
+                    }
+                });
 
 //        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
 //        appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph())
@@ -59,18 +79,14 @@ public class MainActivity extends AppCompatActivity {
 
         // Set up event handlers
         binding.includeNavDrawer.classesNavButton.setOnClickListener((view) -> {
-            fragManager.beginTransaction()
-                    .replace(R.id.content_frame,
-                            activeClassesFragment == null ? new ClassesFragment() : activeClassesFragment)
-                    .commit();
+            swapToFragment(new ClassesFragment(courses));
+            setTitle(R.string.first_fragment_label);
             binding.drawerLayout.closeDrawers();
         });
 
         binding.includeNavDrawer.todoListNavButton.setOnClickListener((view) -> {
-            fragManager.beginTransaction()
-                    .replace(R.id.content_frame,
-                            activeTodoFragment == null ? new TodoFragment() : activeTodoFragment)
-                    .commit();
+            swapToFragment(new TodoFragment(toDoList));
+            setTitle(R.string.second_fragment_label);
             binding.drawerLayout.closeDrawers();
         });
     }
@@ -78,7 +94,29 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.menu_main, menu);
+        MenuItem[] visible = new MenuItem[0];
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+//
+        switch(menuState) {
+            case VIEW_CLASS:
+                visible = new MenuItem[]{menu.findItem(R.id.action_edit_class), menu.findItem(R.id.action_back_to_classes)};
+                break;
+            case EDIT_CLASS:
+                break;
+            case VIEW_TASK:
+                break;
+            case EDIT_TASK:
+                break;
+            case HIDE_MENU:
+            default:
+                visible = new MenuItem[0];
+        }
+        for (int i = 0; i < menu.size(); ++i) {
+            menu.getItem(i).setVisible(false);
+        }
+        for (MenuItem item : visible) {
+            item.setVisible(true);
+        }
         return true;
     }
 
@@ -89,12 +127,25 @@ public class MainActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_back_to_classes) {
+            swapToFragment(new ClassesFragment(courses));
+            setTitle(R.string.first_fragment_label);
+        } else if (id == R.id.action_edit_class) {
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void swapToFragment(Fragment fragment) {
+        fragManager.beginTransaction()
+                .replace(R.id.content_frame, fragment)
+                .commit();
+    }
+
+    public void setMenuState(TaskbarMenuState state) {
+        menuState = state;
+        invalidateOptionsMenu();
     }
 
 //    @Override

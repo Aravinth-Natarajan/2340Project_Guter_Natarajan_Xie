@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">Test String</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_back_to_classes_text">Back</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">Classes</string>
-    <string name="second_fragment_label">Second Fragment</string>
+    <string name="second_fragment_label">To-do</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
 
@@ -53,4 +53,5 @@
     <string name="sort_by_completion_item_text">Completion</string>
     <string name="sort_by_menu_button_text">Sort by</string>
     <string name="show_completed_button_text">Show completed</string>
+    <string name="action_edit_classes_text" />
 </resources>

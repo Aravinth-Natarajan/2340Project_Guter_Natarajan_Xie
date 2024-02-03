@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -13,6 +15,7 @@ import java.util.ArrayList;
 public class ClassListAdapter extends RecyclerView.Adapter<ClassListAdapter.ViewHolder> {
 
     private ArrayList<Course> courseList;
+    private FragmentManager fragManager;
 
     /**
      * Provide a reference to the type of views that you are using
@@ -39,8 +42,9 @@ public class ClassListAdapter extends RecyclerView.Adapter<ClassListAdapter.View
      * @param courseList ArrayList containing the data to populate views to be used
      * by RecyclerView
      */
-    public ClassListAdapter(ArrayList<Course> courseList) {
+    public ClassListAdapter(ArrayList<Course> courseList, FragmentManager fragManager) {
         this.courseList = courseList;
+        this.fragManager = fragManager;
     }
 
     // Create new views (invoked by the layout manager)
@@ -50,6 +54,12 @@ public class ClassListAdapter extends RecyclerView.Adapter<ClassListAdapter.View
         View view = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.class_list_item, viewGroup, false);
 
+        view.setOnClickListener((v) -> {
+            fragManager.beginTransaction()
+                    .replace(R.id.content_frame,
+                            new ClassDetailsFragment())
+                    .commit();
+        });
         return new ViewHolder(view);
     }
 
