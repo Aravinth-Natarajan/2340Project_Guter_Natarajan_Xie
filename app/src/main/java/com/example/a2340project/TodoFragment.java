@@ -9,6 +9,7 @@ import android.widget.PopupMenu;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.a2340project.databinding.TodoFragmentBinding;
 import com.google.android.material.snackbar.Snackbar;
@@ -43,6 +44,12 @@ private ToDoList toDoList;
         menuUpdate.putString("menuStateKey", "HIDE_MENU");
         getParentFragmentManager().setFragmentResult("menuUpdateKey", menuUpdate);
 
+        ToDoList todo = new ToDoList();
+        todo.addTask(new Task("Get This project Done", "Finish frontend backend and ui"));
+        todo.addTask(new Task("Smth else", "Hi"));
+        ToDoListAdapter toDoListAd = new ToDoListAdapter(todo);
+        binding.todoListView.setAdapter(toDoListAd);
+        binding.todoListView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         return binding.getRoot();
     }

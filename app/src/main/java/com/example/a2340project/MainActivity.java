@@ -1,5 +1,6 @@
 package com.example.a2340project;
 
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -27,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Course> courses;
     private ToDoList toDoList;
     private TaskbarMenuState menuState = TaskbarMenuState.HIDE_MENU;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

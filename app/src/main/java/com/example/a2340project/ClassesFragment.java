@@ -35,15 +35,11 @@ public class ClassesFragment extends Fragment {
 
         layoutManager = new LinearLayoutManager(getActivity());
 
-        DividerItemDecoration divider = new DividerItemDecoration(
-                binding.courseListView.getContext(), layoutManager.getOrientation());
-
-        binding.courseListView.addItemDecoration(divider);
 
         ArrayList<Course> courses = new ArrayList<>();
-        courses.add(new Course("Test course"));
-        courses.add(new Course("Test course 2"));
-        courses.add(new Course("Test course 3"));
+        courses.add(new Course("Test course", "Howey", "Gerard"));
+        courses.add(new Course("Test course 2", "Brent Key", "L"));
+        courses.add(new Course("Test course 3", "Super Bowl", "Tom Brady"));
 
         ClassListAdapter classListAdapter = new ClassListAdapter(courses, getActivity().getSupportFragmentManager());
         binding.courseListView.setAdapter(classListAdapter);
