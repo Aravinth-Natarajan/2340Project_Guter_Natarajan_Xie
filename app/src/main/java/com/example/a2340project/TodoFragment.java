@@ -36,6 +36,13 @@ private ArrayList<Task> incompleteTasks;
         tasks = new ArrayList<>();
         incompleteTasks = new ArrayList<>();
 
+        ToDoList todo = new ToDoList();
+        todo.addTask(new Task("Get This project Done", "Finish frontend backend and ui"));
+        todo.addTask(new Task("Smth else", "Hi"));
+        ToDoListAdapter toDoListAd = new ToDoListAdapter(todo);
+        binding.todoListView.setAdapter(toDoListAd);
+        binding.todoListView.setLayoutManager(new LinearLayoutManager(getContext()));
+
         return binding.getRoot();
     }
 
