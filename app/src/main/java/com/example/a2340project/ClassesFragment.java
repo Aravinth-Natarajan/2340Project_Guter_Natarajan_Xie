@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.a2340project.databinding.ClassesFragmentBinding;
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 public class ClassesFragment extends Fragment {
 
     private ClassesFragmentBinding binding;
+    private LinearLayoutManager layoutManager;
 
     @Override
     public View onCreateView(
@@ -24,6 +26,13 @@ public class ClassesFragment extends Fragment {
     ) {
 
         binding = ClassesFragmentBinding.inflate(inflater, container, false);
+
+        layoutManager = new LinearLayoutManager(getActivity());
+
+        DividerItemDecoration divider = new DividerItemDecoration(
+                binding.courseListView.getContext(), layoutManager.getOrientation());
+
+        binding.courseListView.addItemDecoration(divider);
 
         ArrayList<Course> courses = new ArrayList<>();
         courses.add(new Course("Test course"));

@@ -18,6 +18,8 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private FragmentManager fragManager;
     private ActionBarDrawerToggle drawerToggle;
+    private ClassesFragment activeClassesFragment;
+    private TodoFragment activeTodoFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +38,8 @@ public class MainActivity extends AppCompatActivity {
 
         // Set fragment manager and display home fragment
         fragManager = getSupportFragmentManager();
-        fragManager.beginTransaction().replace(R.id.content_frame, new ClassesFragment()).commit();
+        activeClassesFragment = new ClassesFragment();
+        fragManager.beginTransaction().replace(R.id.content_frame, activeClassesFragment).commit();
 
 
 //        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
@@ -54,13 +57,20 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
+        // Set up event handlers
         binding.includeNavDrawer.classesNavButton.setOnClickListener((view) -> {
-            fragManager.beginTransaction().replace(R.id.content_frame, new ClassesFragment()).commit();
+            fragManager.beginTransaction()
+                    .replace(R.id.content_frame,
+                            activeClassesFragment == null ? new ClassesFragment() : activeClassesFragment)
+                    .commit();
             binding.drawerLayout.closeDrawers();
         });
 
         binding.includeNavDrawer.todoListNavButton.setOnClickListener((view) -> {
-            fragManager.beginTransaction().replace(R.id.content_frame, new TodoFragment()).commit();
+            fragManager.beginTransaction()
+                    .replace(R.id.content_frame,
+                            activeTodoFragment == null ? new TodoFragment() : activeTodoFragment)
+                    .commit();
             binding.drawerLayout.closeDrawers();
         });
     }

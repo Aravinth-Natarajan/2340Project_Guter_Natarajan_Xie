@@ -25,7 +25,7 @@ public class ClassListAdapter extends RecyclerView.Adapter<ClassListAdapter.View
             super(view);
             // Define click listener for the ViewHolder's View
 
-            textView = view.findViewById(R.id.class_list_item_text);
+            textView = view.findViewById(R.id.class_list_item_course_name);
         }
 
         public TextView getTextView() {
