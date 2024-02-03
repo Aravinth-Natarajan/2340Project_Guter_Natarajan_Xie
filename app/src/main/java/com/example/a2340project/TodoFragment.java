@@ -14,6 +14,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.a2340project.databinding.TodoFragmentBinding;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.time.LocalDateTime;
+import java.time.temporal.TemporalAmount;
 import java.util.ArrayList;
 import java.util.Comparator;
 
@@ -44,10 +46,13 @@ private ToDoList toDoList;
         menuUpdate.putString("menuStateKey", "HIDE_MENU");
         getParentFragmentManager().setFragmentResult("menuUpdateKey", menuUpdate);
 
-        ToDoList todo = new ToDoList();
-        todo.addTask(new Task("Get This project Done", "Finish frontend backend and ui"));
-        todo.addTask(new Task("Smth else", "Hi"));
-        ToDoListAdapter toDoListAd = new ToDoListAdapter(todo);
+        toDoList = new ToDoList();
+        toDoList.addTask(new Task("Done", LocalDateTime.now(), "Jaosdija Hi"));
+        toDoList.addTask(new Task("Done", LocalDateTime.now(), "Jaosdija Hi"));
+        toDoList.addTask(new Task("Currently working", LocalDateTime.now().minusDays(2), "Jaosdija Hi"));
+        toDoList.addTask(new Task("AAAAAYyyyy", LocalDateTime.now(), "Jaosdija Hi"));
+        toDoList.addTask(new Task("Get This project Done Earlier", LocalDateTime.now().minusDays(6), "Jaosdija Hi"));
+        ToDoListAdapter toDoListAd = new ToDoListAdapter(toDoList);
         binding.todoListView.setAdapter(toDoListAd);
         binding.todoListView.setLayoutManager(new LinearLayoutManager(getContext()));
 
@@ -73,7 +78,14 @@ private ToDoList toDoList;
         });
     }
 
-@Override
+    @Override
+    public void onStart() {
+        super.onStart();
+        toDoList.returnList().sort(new TaskClassComparator());
+
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;

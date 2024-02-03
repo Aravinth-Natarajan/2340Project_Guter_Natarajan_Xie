@@ -25,5 +25,26 @@ public class ToDoList {
     public List<Task> returnList() {
         return tasks;
     }
-    //Implement sorting based on date
+
+
+    public List<Task> returnCompleteTasks() {
+        List<Task> incompleteTasks = new ArrayList<>();
+        for (Task task: tasks) {
+            if (!task.getChecked()) {
+                incompleteTasks.add(task);
+            }
+        }
+        return incompleteTasks;
+    }
+
+    public List<Task> retur() {
+        List<Task> incompleteTasks = new ArrayList<>();
+        for (Task task: tasks) {
+            if (!task.getChecked()) {
+                incompleteTasks.add(task);
+            }
+        }
+        return incompleteTasks;
+    }
+     //Implement sorting based on date
 }

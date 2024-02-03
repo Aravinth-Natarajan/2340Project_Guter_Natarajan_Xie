@@ -3,9 +3,10 @@ package com.example.a2340project;
 import org.junit.Test;
 
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 
 import static org.junit.Assert.*;
 
@@ -40,7 +41,7 @@ public class ExampleUnitTest {
     }
     @Test
     public void Task_IsCreated() {
-        Date date = new Date();
+        Date date = new LocalDate();
         Task testTask = new Task("Workout", date, "Workout 5 times");
         assertEquals(testTask.title, "Workout");
         assertEquals(testTask.dueDate, date);
