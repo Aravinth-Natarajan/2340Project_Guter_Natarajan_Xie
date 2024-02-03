@@ -54,4 +54,5 @@
     <string name="sort_by_menu_button_text">Sort by</string>
     <string name="show_completed_button_text">Show completed</string>
     <string name="action_edit_classes_text" />
+    <string name="meeting_time_descriptor">Meeting Schedule</string>
 </resources>

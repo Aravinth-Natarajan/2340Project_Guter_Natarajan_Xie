@@ -26,6 +26,7 @@ public class ClassListAdapter extends RecyclerView.Adapter<ClassListAdapter.View
      */
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
+        private final View root;
         private final TextView textView;
         private final TextView textView2;
         private final TextView textView3;
@@ -39,12 +40,16 @@ public class ClassListAdapter extends RecyclerView.Adapter<ClassListAdapter.View
         public ViewHolder(View view) {
             super(view);
             // Define click listener for the ViewHolder's View
+            root = view;
             con = view.findViewById(R.id.class_list_item_card_color_layout);
             textView = view.findViewById(R.id.class_list_item_course_name);
             textView2 = view.findViewById(R.id.class_list_item_class_section);
             textView3 = view.findViewById(R.id.class_list_item_location);
         }
 
+        public View getRoot() {
+            return root;
+        }
         public TextView getTextView() {
             return textView;
         }
@@ -78,12 +83,6 @@ public class ClassListAdapter extends RecyclerView.Adapter<ClassListAdapter.View
         View view = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.class_list_item, viewGroup, false);
 
-        view.setOnClickListener((v) -> {
-            fragManager.beginTransaction()
-                    .replace(R.id.content_frame,
-                            new ClassDetailsFragment())
-                    .commit();
-        });
         return new ViewHolder(view);
     }
 
@@ -93,10 +92,18 @@ public class ClassListAdapter extends RecyclerView.Adapter<ClassListAdapter.View
 
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
-        viewHolder.getTextView().setText(courseList.get(position).getName());
-        viewHolder.getTextView2().setText(courseList.get(position).getSection());
-        viewHolder.getTextView3().setText(courseList.get(position).getLocation());
+        Course course = courseList.get(position);
+        viewHolder.getTextView().setText(course.getName());
+        viewHolder.getTextView2().setText(course.getSection());
+        viewHolder.getTextView3().setText(course.getLocation());
         viewHolder.getCon().setBackgroundColor(viewHolder.getRandomColor());
+
+        viewHolder.getRoot().setOnClickListener((v) -> {
+            fragManager.beginTransaction()
+                    .replace(R.id.content_frame,
+                            new ClassDetailsFragment(course))
+                    .commit();
+        });
     }
 
     // Return the size of your dataset (invoked by the layout manager)
