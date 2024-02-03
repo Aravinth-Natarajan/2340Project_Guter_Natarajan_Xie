@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-public class ClassListAdapter extends RecyclerView.Adapter<ClassListAdapter.ViewHolder> {
+    public class ClassListAdapter extends RecyclerView.Adapter<ClassListAdapter.ViewHolder> {
 
     private ArrayList<Course> courseList;
 
@@ -20,17 +20,28 @@ public class ClassListAdapter extends RecyclerView.Adapter<ClassListAdapter.View
      */
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView textView;
+        private final TextView textView2;
+        private final TextView textView3;
 
         public ViewHolder(View view) {
             super(view);
             // Define click listener for the ViewHolder's View
 
             textView = view.findViewById(R.id.class_list_item_course_name);
+            textView2 = view.findViewById(R.id.class_list_item_class_section);
+            textView3 = view.findViewById(R.id.class_list_item_location);
         }
 
         public TextView getTextView() {
             return textView;
         }
+        public TextView getTextView2() {
+            return textView2;
+        }
+        public TextView getTextView3() {
+            return textView3;
+        }
+
     }
 
     /**
@@ -60,6 +71,8 @@ public class ClassListAdapter extends RecyclerView.Adapter<ClassListAdapter.View
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
         viewHolder.getTextView().setText(courseList.get(position).getName());
+        viewHolder.getTextView2().setText(courseList.get(position).getSection());
+        viewHolder.getTextView3().setText(courseList.get(position).getLocation());
     }
 
     // Return the size of your dataset (invoked by the layout manager)

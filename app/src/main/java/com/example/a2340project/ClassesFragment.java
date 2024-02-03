@@ -35,9 +35,9 @@ public class ClassesFragment extends Fragment {
         binding.courseListView.addItemDecoration(divider);
 
         ArrayList<Course> courses = new ArrayList<>();
-        courses.add(new Course("Test course"));
-        courses.add(new Course("Test course 2"));
-        courses.add(new Course("Test course 3"));
+        courses.add(new Course("Test course", "Howey", "Gerard"));
+        courses.add(new Course("Test course 2", "Brent Key", "L"));
+        courses.add(new Course("Test course 3", "Super Bowl", "Tom Brady"));
 
         ClassListAdapter classListAdapter = new ClassListAdapter(courses);
         binding.courseListView.setAdapter(classListAdapter);

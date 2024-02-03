@@ -16,6 +16,9 @@ public class Course {
     public Course(String name) {
         this(name, new ArrayList<>(), "Unknown", "Unknown", "Unknown");
     }
+    public Course(String name, String location, String section) {
+        this(name, new ArrayList<>(), location, "Unknown", section);
+    }
 
     public Course(String name, List<ClassTime> classTimes, String location, String instructor, String section) {
         this.name = name;
@@ -28,7 +31,9 @@ public class Course {
     public String getName() {
         return this.name;
     }
-
+    public String getSection() {
+        return this.section;
+    }
     public List<ClassTime> getClassTimes() {
         return this.classTimes;
     }
