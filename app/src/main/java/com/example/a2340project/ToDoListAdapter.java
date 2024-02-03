@@ -13,16 +13,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class ClassListAdapter extends RecyclerView.Adapter<ClassListAdapter.ViewHolder> {
+public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ToDoListViewHolder> {
 
-    private ArrayList<Course> courseList;
+    private ToDoList taskList;
 
     /**
      * Provide a reference to the type of views that you are using
      * (custom ViewHolder)
      */
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ToDoListViewHolder extends RecyclerView.ViewHolder {
         private final TextView textView;
         private final TextView textView2;
         private final TextView textView3;
@@ -33,7 +33,7 @@ public class ClassListAdapter extends RecyclerView.Adapter<ClassListAdapter.View
             return Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
         }
 
-        public ViewHolder(View view) {
+        public ToDoListViewHolder(View view) {
             super(view);
             // Define click listener for the ViewHolder's View
             con = view.findViewById(R.id.class_list_item_card_color_layout);
@@ -60,39 +60,39 @@ public class ClassListAdapter extends RecyclerView.Adapter<ClassListAdapter.View
     /**
      * Initialize the dataset of the Adapter
      *
-     * @param courseList ArrayList containing the data to populate views to be used
+     * @param taskList ArrayList containing the data to populate views to be used
      * by RecyclerView
      */
-    public ClassListAdapter(ArrayList<Course> courseList) {
-        this.courseList = courseList;
+    public ToDoListAdapter(ToDoList taskList) {
+        this.taskList = taskList;
     }
 
     // Create new views (invoked by the layout manager)
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+    public ToDoListViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         // Create a new view, which defines the UI of the list item
         View view = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.class_list_item, viewGroup, false);
 
-        return new ViewHolder(view);
+        return new ToDoListViewHolder(view);
     }
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(ViewHolder viewHolder, final int position) {
+    public void onBindViewHolder(ToDoListViewHolder viewHolder, final int position) {
 
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
-        viewHolder.getTextView().setText(courseList.get(position).getName());
-        viewHolder.getTextView2().setText(courseList.get(position).getSection());
-        viewHolder.getTextView3().setText(courseList.get(position).getLocation());
+        viewHolder.getTextView().setText(taskList.returnList().get(position).getTitle());
+//        viewHolder.getTextView2().setText(taskList.returnList().get(position).getTitle());
+        viewHolder.getTextView3().setText(taskList.returnList().get(position).getDescription());
         viewHolder.getCon().setBackgroundColor(viewHolder.getRandomColor());
     }
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return courseList.size();
+        return taskList.returnList().size();
     }
 }
 

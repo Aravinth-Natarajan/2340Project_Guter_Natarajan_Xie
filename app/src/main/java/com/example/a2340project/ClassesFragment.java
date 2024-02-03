@@ -29,10 +29,6 @@ public class ClassesFragment extends Fragment {
 
         layoutManager = new LinearLayoutManager(getActivity());
 
-        DividerItemDecoration divider = new DividerItemDecoration(
-                binding.courseListView.getContext(), layoutManager.getOrientation());
-
-        binding.courseListView.addItemDecoration(divider);
 
         ArrayList<Course> courses = new ArrayList<>();
         courses.add(new Course("Test course", "Howey", "Gerard"));

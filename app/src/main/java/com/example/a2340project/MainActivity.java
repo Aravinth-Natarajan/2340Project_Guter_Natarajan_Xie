@@ -1,5 +1,6 @@
 package com.example.a2340project;
 
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -12,6 +13,8 @@ import android.view.MenuItem;
 
 import com.example.a2340project.databinding.ActivityMainBinding;
 
+import java.util.Random;
+
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration appBarConfiguration;
@@ -20,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
     private ActionBarDrawerToggle drawerToggle;
     private ClassesFragment activeClassesFragment;
     private TodoFragment activeTodoFragment;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -3,7 +3,10 @@ package com.example.a2340project;
 import org.junit.Test;
 
 import java.time.DayOfWeek;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
+
 import static org.junit.Assert.*;
 
 /**
