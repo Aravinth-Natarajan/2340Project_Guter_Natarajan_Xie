@@ -36,10 +36,10 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ToDoLi
         public ToDoListViewHolder(View view) {
             super(view);
             // Define click listener for the ViewHolder's View
-            con = view.findViewById(R.id.class_list_item_card_color_layout);
-            textView = view.findViewById(R.id.class_list_item_course_name);
-            textView2 = view.findViewById(R.id.class_list_item_class_section);
-            textView3 = view.findViewById(R.id.class_list_item_location);
+            con = view.findViewById(R.id.todo_list_card_view);
+            textView = view.findViewById(R.id.todo_list_item_title);
+            textView2 = view.findViewById(R.id.todo_list_item_dueDate);
+            textView3 = view.findViewById(R.id.todo_list_item_description);
         }
 
         public TextView getTextView() {
@@ -72,7 +72,7 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ToDoLi
     public ToDoListViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         // Create a new view, which defines the UI of the list item
         View view = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.class_list_item, viewGroup, false);
+                .inflate(R.layout.todo_list_item, viewGroup, false);
 
         return new ToDoListViewHolder(view);
     }

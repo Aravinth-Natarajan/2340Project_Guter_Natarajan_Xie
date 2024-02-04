@@ -9,9 +9,9 @@ public class TaskClassComparator implements Comparator<Task>  {
         int classComp;
 
         if (o1.getCourse() == null && o2.getCourse() != null) {
-            classComp = -1;
-        } else if (o1.getCourse() != null && o2.getCourse() == null) {
             classComp = 1;
+        } else if (o1.getCourse() != null && o2.getCourse() == null) {
+            classComp = -1;
         } else if (o1.getCourse() == null && o2.getCourse() == null) {
             classComp = 0;
         } else {

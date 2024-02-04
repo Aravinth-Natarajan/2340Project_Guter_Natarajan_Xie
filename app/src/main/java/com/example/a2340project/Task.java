@@ -26,6 +26,9 @@ public class Task {
         this.course = course;
         this.location = location;
     }
+    public Task(String title, LocalDateTime dueDate, String description, Course course) {
+        this(title, dueDate, description, course, "");
+    }
 
 
     public Task(String title, String description) {

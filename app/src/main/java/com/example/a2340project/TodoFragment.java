@@ -45,11 +45,14 @@ private ToDoList toDoList;
         Bundle menuUpdate = new Bundle();
         menuUpdate.putString("menuStateKey", "HIDE_MENU");
         getParentFragmentManager().setFragmentResult("menuUpdateKey", menuUpdate);
+        Course test1Course = new Course("B3511");
+        Course test2Course = new Course("Z2200");
+        Course test3Course = new Course("H4641");
 
         toDoList = new ToDoList();
-        toDoList.addTask(new Task("Done", LocalDateTime.now(), "Jaosdija Hi"));
-        toDoList.addTask(new Task("Done", LocalDateTime.now(), "Jaosdija Hi"));
-        toDoList.addTask(new Task("Currently working", LocalDateTime.now().minusDays(2), "Jaosdija Hi"));
+        toDoList.addTask(new Task("Done", LocalDateTime.now(), "Jaosdija Hi", test3Course));
+        toDoList.addTask(new Task("Done2", LocalDateTime.now(), "Venky Hi", test1Course));
+        toDoList.addTask(new Task("Currently working", LocalDateTime.now().minusDays(2), "Jaosdija Hi", test2Course));
         toDoList.addTask(new Task("AAAAAYyyyy", LocalDateTime.now(), "Jaosdija Hi"));
         toDoList.addTask(new Task("Get This project Done Earlier", LocalDateTime.now().minusDays(6), "Jaosdija Hi"));
         ToDoListAdapter toDoListAd = new ToDoListAdapter(toDoList);
