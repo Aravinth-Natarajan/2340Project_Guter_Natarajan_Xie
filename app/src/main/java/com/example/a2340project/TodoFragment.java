@@ -14,6 +14,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.a2340project.databinding.TodoFragmentBinding;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.time.LocalDateTime;
+import java.time.temporal.TemporalAmount;
 import java.util.ArrayList;
 import java.util.Comparator;
 
@@ -42,11 +44,18 @@ private ToDoList toDoList;
 
         MainActivity.updateMenu(getParentFragmentManager(), TaskbarMenuState.TASK_LIST);
 
-        ToDoList todo = new ToDoList();
-        todo.addTask(new Task("Get This project Done", "Finish frontend backend and ui"));
-        todo.addTask(new Task("Smth else", "Hi"));
-        ToDoListAdapter toDoListAd = new ToDoListAdapter(todo);
+        Course test1Course = new Course("B3511");
+        Course test2Course = new Course("Z2200");
+        Course test3Course = new Course("H4641");
 
+        toDoList = new ToDoList();
+        toDoList.addTask(new Task("Done", LocalDateTime.now(), "Jaosdija Hi", test3Course));
+        toDoList.addTask(new Task("Done2", LocalDateTime.now(), "Venky Hi", test1Course));
+        toDoList.addTask(new Task("Currently working", LocalDateTime.now().minusDays(2), "Jaosdija Hi", test2Course));
+        toDoList.addTask(new Task("AAAAAYyyyy", LocalDateTime.now(), "Jaosdija Hi"));
+        toDoList.addTask(new Task("Get This project Done Earlier", LocalDateTime.now().minusDays(6), "Jaosdija Hi"));
+
+        ToDoListAdapter toDoListAd = new ToDoListAdapter(toDoList);
         binding.todoListView.setAdapter(toDoListAd);
         binding.todoListView.setLayoutManager(new LinearLayoutManager(getContext()));
 
@@ -72,7 +81,14 @@ private ToDoList toDoList;
         });
     }
 
-@Override
+    @Override
+    public void onStart() {
+        super.onStart();
+        toDoList.returnList().sort(new TaskClassComparator());
+
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;

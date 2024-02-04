@@ -4,7 +4,7 @@ package com.example.a2340project;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Course {
+public class Course implements Comparable<Course> {
 
     private String name;
     private List<ClassTime> classTimes;
@@ -51,4 +51,8 @@ public class Course {
         return name;
     }
 
+    @Override
+    public int compareTo(Course o) {
+        return this.name.compareTo(o.name);
+    }
 }
