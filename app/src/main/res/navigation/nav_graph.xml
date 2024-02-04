@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/FirstFragment"
         android:name="com.example.a2340project.ClassesFragment"
-        android:label="@string/first_fragment_label"
+        android:label="@string/classes_fragment_label"
         tools:layout="@layout/classes_fragment" >
 
         <action

@@ -40,14 +40,13 @@ private ToDoList toDoList;
         tasks = new ArrayList<>();
         incompleteTasks = new ArrayList<>();
 
-        Bundle menuUpdate = new Bundle();
-        menuUpdate.putString("menuStateKey", "HIDE_MENU");
-        getParentFragmentManager().setFragmentResult("menuUpdateKey", menuUpdate);
+        MainActivity.updateMenu(getParentFragmentManager(), TaskbarMenuState.TASK_LIST);
 
         ToDoList todo = new ToDoList();
         todo.addTask(new Task("Get This project Done", "Finish frontend backend and ui"));
         todo.addTask(new Task("Smth else", "Hi"));
         ToDoListAdapter toDoListAd = new ToDoListAdapter(todo);
+
         binding.todoListView.setAdapter(toDoListAd);
         binding.todoListView.setLayoutManager(new LinearLayoutManager(getContext()));
 

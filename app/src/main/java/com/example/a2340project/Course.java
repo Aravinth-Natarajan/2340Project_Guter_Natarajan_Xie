@@ -46,5 +46,9 @@ public class Course {
         return this.instructor;
     }
 
+    @Override
+    public String toString() {
+        return name;
+    }
 
 }

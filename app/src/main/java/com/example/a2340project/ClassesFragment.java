@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -38,7 +39,6 @@ public class ClassesFragment extends Fragment {
         layoutManager = new LinearLayoutManager(getActivity());
 
 
-        ArrayList<Course> courses = new ArrayList<>();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             ArrayList<ClassTime> gerardTimes = new ArrayList<>();
             gerardTimes.add(new ClassTime(DayOfWeek.MONDAY, "9:00 AM", 75));
@@ -55,10 +55,7 @@ public class ClassesFragment extends Fragment {
         binding.courseListView.setAdapter(classListAdapter);
         binding.courseListView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        Bundle menuUpdate = new Bundle();
-        menuUpdate.putString("menuStateKey", "HIDE_MENU");
-        getParentFragmentManager().setFragmentResult("menuUpdateKey", menuUpdate);
-
+        MainActivity.updateMenu(getParentFragmentManager(), TaskbarMenuState.CLASS_LIST);
 
         return binding.getRoot();
 
@@ -79,10 +76,9 @@ public class ClassesFragment extends Fragment {
     }
 
 
-@Override
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
     }
-
 }

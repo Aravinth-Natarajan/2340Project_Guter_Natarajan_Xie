@@ -12,12 +12,12 @@ import androidx.fragment.app.FragmentManager;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class ClassListAdapter extends RecyclerView.Adapter<ClassListAdapter.ViewHolder> {
 
-    private ArrayList<Course> courseList;
+    private List<Course> courseList;
     private FragmentManager fragManager;
 
     /**
@@ -71,7 +71,7 @@ public class ClassListAdapter extends RecyclerView.Adapter<ClassListAdapter.View
      * @param courseList ArrayList containing the data to populate views to be used
      * by RecyclerView
      */
-    public ClassListAdapter(ArrayList<Course> courseList, FragmentManager fragManager) {
+    public ClassListAdapter(List<Course> courseList, FragmentManager fragManager) {
         this.courseList = courseList;
         this.fragManager = fragManager;
     }

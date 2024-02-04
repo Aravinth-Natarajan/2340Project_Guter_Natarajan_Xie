@@ -1,12 +1,13 @@
 package com.example.a2340project;
 
-import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.ui.AppBarConfiguration;
 
 import android.util.Log;
@@ -28,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Course> courses;
     private ToDoList toDoList;
     private TaskbarMenuState menuState = TaskbarMenuState.HIDE_MENU;
+    private CourseViewModel selectedCourse;
 
 
     @Override
@@ -45,12 +47,13 @@ public class MainActivity extends AppCompatActivity {
         drawerToggle = new ActionBarDrawerToggle(this, binding.drawerLayout, binding.mainToolbar, R.string.app_name, R.string.app_name);
         drawerToggle.syncState();
 
+        courses = new ArrayList<>();
+
         // Set fragment manager and display home fragment
         fragManager = getSupportFragmentManager();
         swapToFragment(new ClassesFragment(courses));
-        setTitle(R.string.first_fragment_label);
+        setTitle(R.string.classes_fragment_label);
 
-        courses = new ArrayList<>();
 
         fragManager.setFragmentResultListener(
                 "menuUpdateKey", this,
@@ -63,6 +66,8 @@ public class MainActivity extends AppCompatActivity {
                         Log.e("Menu Update Error: ", e.getStackTrace().toString());
                     }
                 });
+
+        selectedCourse = new ViewModelProvider(this).get(CourseViewModel.class);
 
 //        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
 //        appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph())
@@ -82,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
         // Set up event handlers
         binding.includeNavDrawer.classesNavButton.setOnClickListener((view) -> {
             swapToFragment(new ClassesFragment(courses));
-            setTitle(R.string.first_fragment_label);
+            setTitle(R.string.classes_fragment_label);
             binding.drawerLayout.closeDrawers();
         });
 
@@ -100,10 +105,22 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_main, menu);
 //
         switch(menuState) {
+            case CLASS_LIST:
+                visible = new MenuItem[]{menu.findItem(R.id.action_add_class)};
+                break;
+            case TASK_LIST:
+                visible = new MenuItem[]{menu.findItem(R.id.action_add_task)};
+                break;
             case VIEW_CLASS:
-                visible = new MenuItem[]{menu.findItem(R.id.action_edit_class), menu.findItem(R.id.action_back_to_classes)};
+                visible = new MenuItem[]{
+                        menu.findItem(R.id.action_edit_class),
+                        menu.findItem(R.id.action_back_to_classes),
+                        menu.findItem(R.id.action_delete_class)};
                 break;
             case EDIT_CLASS:
+                visible = new MenuItem[]{
+                        menu.findItem(R.id.action_confirm_class),
+                        menu.findItem(R.id.action_back_to_classes)};
                 break;
             case VIEW_TASK:
                 break;
@@ -130,10 +147,21 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_back_to_classes) {
+            selectedCourse.setCourse(null);
             swapToFragment(new ClassesFragment(courses));
-            setTitle(R.string.first_fragment_label);
+            setTitle(R.string.classes_fragment_label);
         } else if (id == R.id.action_edit_class) {
-            return true;
+            swapToFragment(new ClassEditorFragment(selectedCourse.getCourse().getValue()));
+            setTitle(R.string.course_editing_fragment_label);
+        } else if (id == R.id.action_confirm_class) {
+            makeClassConfirmationDialog();
+        } else if (id == R.id.action_add_class) {
+            Course newCourse = new Course("");
+            selectedCourse.setCourse(newCourse);
+            selectedCourse.setIsNew(true);
+            swapToFragment(new ClassEditorFragment(newCourse));
+        } else if (id == R.id.action_delete_class) {
+            makeClassDeletionDialog();
         }
 
         return super.onOptionsItemSelected(item);
@@ -156,4 +184,48 @@ public class MainActivity extends AppCompatActivity {
 //        return NavigationUI.navigateUp(navController,Ac appBarConfiguration)
 //                || super.onSupportNavigateUp();
 //    }
+    public static void updateMenu(FragmentManager manager, TaskbarMenuState newState) {
+        Bundle menuUpdate = new Bundle();
+        menuUpdate.putString("menuStateKey", newState.name());
+        manager.setFragmentResult("menuUpdateKey", menuUpdate);
+    }
+
+    private void makeClassConfirmationDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Confirm changes?");
+        builder.setPositiveButton("Yes",
+                (dialog, id) -> {
+                    if (selectedCourse.isNew().getValue()) {
+                        courses.add(selectedCourse.getCourse().getValue());
+                    }
+                    selectedCourse.setCourse(null);
+                    selectedCourse.setIsNew(false);
+                    swapToFragment(new ClassesFragment(courses));
+                    setTitle(R.string.classes_fragment_label);
+                });
+        builder.setNegativeButton("No", (dialog, id) -> {});
+        builder.create().show();
+    }
+
+    private void makeClassDeletionDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Wait!");
+        builder.setMessage("Are you sure you want to delete this class?");
+        builder.setPositiveButton("Yes",
+                (dialog, id) -> {
+                    Course course = selectedCourse.getCourse().getValue();
+                    courses.remove(course);
+                    selectedCourse.setCourse(null);
+                    selectedCourse.setIsNew(false);
+                    swapToFragment(new ClassesFragment(courses));
+                    setTitle(R.string.classes_fragment_label);
+                });
+        builder.setNegativeButton("No", (dialog, id) -> {});
+        builder.create().show();
+    }
+    private void printCourses() {
+        for (Course course : courses) {
+            Log.e("courses List:", course.toString());
+        }
+    }
 }
