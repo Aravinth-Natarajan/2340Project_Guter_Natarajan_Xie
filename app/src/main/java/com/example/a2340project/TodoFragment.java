@@ -17,6 +17,7 @@ import com.google.android.material.snackbar.Snackbar;
 import java.time.LocalDateTime;
 import java.time.temporal.TemporalAmount;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Comparator;
 
 public class TodoFragment extends Fragment {
@@ -49,11 +50,11 @@ private ToDoList toDoList;
         Course test3Course = new Course("H4641");
 
         toDoList = new ToDoList();
-        toDoList.addTask(new Task("Done", LocalDateTime.now(), "Jaosdija Hi", test3Course));
-        toDoList.addTask(new Task("Done2", LocalDateTime.now(), "Venky Hi", test1Course));
-        toDoList.addTask(new Task("Currently working", LocalDateTime.now().minusDays(2), "Jaosdija Hi", test2Course));
-        toDoList.addTask(new Task("AAAAAYyyyy", LocalDateTime.now(), "Jaosdija Hi"));
-        toDoList.addTask(new Task("Get This project Done Earlier", LocalDateTime.now().minusDays(6), "Jaosdija Hi"));
+        toDoList.addTask(new Task("Done", Calendar.getInstance(), "Jaosdija Hi", test3Course));
+        toDoList.addTask(new Task("Done2", Calendar.getInstance(), "Venky Hi", test1Course));
+        toDoList.addTask(new Task("Currently working", 7, 24, 6, 30, "Jaosdija Hi", test2Course, "Klaus"));
+        toDoList.addTask(new Task("AAAAAYyyyy", Calendar.getInstance(), "Jaosdija Hi"));
+        toDoList.addTask(new Task("Get This project Done Earlier", Calendar.getInstance(), "Jaosdija Hi"));
 
         ToDoListAdapter toDoListAd = new ToDoListAdapter(toDoList);
         binding.todoListView.setAdapter(toDoListAd);
