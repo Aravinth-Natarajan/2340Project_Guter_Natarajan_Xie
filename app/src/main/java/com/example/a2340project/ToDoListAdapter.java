@@ -5,17 +5,18 @@ import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ToDoListViewHolder> {
 
-    private ToDoList taskList;
+    private List<Task> taskList;
 
     /**
      * Provide a reference to the type of views that you are using
@@ -23,10 +24,11 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ToDoLi
      */
 
     public static class ToDoListViewHolder extends RecyclerView.ViewHolder {
-        private final TextView textView;
-        private final TextView textView2;
-        private final TextView textView3;
-
+        private final TextView textViewTitle;
+        private final TextView textViewDueDate;
+        private final TextView textViewDescription;
+        private final TextView textViewCourse;
+        private final CheckBox checkBox;
         private final ConstraintLayout con;
         public int getRandomColor(){
             Random rnd = new Random();
@@ -37,24 +39,29 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ToDoLi
             super(view);
             // Define click listener for the ViewHolder's View
             con = view.findViewById(R.id.todo_list_card_view);
-            textView = view.findViewById(R.id.todo_list_item_title);
-            textView2 = view.findViewById(R.id.todo_list_item_dueDate);
-            textView3 = view.findViewById(R.id.todo_list_item_description);
+            textViewTitle = view.findViewById(R.id.todo_list_item_title);
+            textViewDueDate = view.findViewById(R.id.todo_list_item_dueDate);
+            textViewDescription = view.findViewById(R.id.todo_list_item_description);
+            textViewCourse = view.findViewById(R.id.todo_list_item_course);
+            checkBox = view.findViewById(R.id.checkBox);
         }
 
-        public TextView getTextView() {
-            return textView;
+        public TextView getTextViewTitle() {
+            return textViewTitle;
         }
-        public TextView getTextView2() {
-            return textView2;
+        public TextView getTextViewDueDate() {
+            return textViewDueDate;
         }
-        public TextView getTextView3() {
-            return textView3;
+        public TextView getTextViewDescription() {
+            return textViewDescription;
         }
+
+        public TextView getTextViewCourse() { return textViewCourse;}
+
         public ConstraintLayout getCon() {
             return con;
         }
-
+        public CheckBox getCheck() {return checkBox; }
     }
 
     /**
@@ -63,7 +70,7 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ToDoLi
      * @param taskList ArrayList containing the data to populate views to be used
      * by RecyclerView
      */
-    public ToDoListAdapter(ToDoList taskList) {
+    public ToDoListAdapter(List<Task> taskList) {
         this.taskList = taskList;
     }
 
@@ -83,16 +90,25 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ToDoLi
 
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
-        viewHolder.getTextView().setText(taskList.returnList().get(position).getTitle());
-        viewHolder.getTextView2().setText(taskList.returnList().get(position).getDueDateString());
-        viewHolder.getTextView3().setText(taskList.returnList().get(position).getDescription());
+        viewHolder.getTextViewTitle().setText(taskList.get(position).getTitle());
+        viewHolder.getTextViewDueDate().setText(taskList.get(position).getDueDateString());
+        viewHolder.getTextViewDescription().setText(taskList.get(position).getDescription());
+        if (taskList.get(position).getCourse() == null)
+            viewHolder.getTextViewCourse().setText("No Course");
+        else
+            viewHolder.getTextViewCourse().setText(taskList.get(position).getCourse().toString());
         viewHolder.getCon().setBackgroundColor(viewHolder.getRandomColor());
+        viewHolder.getCheck().setChecked(taskList.get(position).getChecked());
+        viewHolder.getCheck().setOnClickListener((v) -> {
+            taskList.get(position).setCheck();
+        });
+
     }
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return taskList.returnList().size();
+        return taskList.size();
     }
 }
 

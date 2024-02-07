@@ -6,6 +6,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupMenu;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -20,7 +21,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Comparator;
 
-public class TodoFragment extends Fragment {
+public class TodoFragment extends Fragment implements PopupMenu.OnMenuItemClickListener {
 
 private TodoFragmentBinding binding;
 
@@ -55,8 +56,9 @@ private ToDoList toDoList;
         toDoList.addTask(new Task("Currently working", 7, 24, 6, 30, "Jaosdija Hi", test2Course, "Klaus"));
         toDoList.addTask(new Task("AAAAAYyyyy", Calendar.getInstance(), "Jaosdija Hi"));
         toDoList.addTask(new Task("Get This project Done Earlier", Calendar.getInstance(), "Jaosdija Hi"));
+        toDoList.addTask(new Task("I amm dieing", 10, 30, 15, 45, "kms", test1Course, "cross land"));
 
-        ToDoListAdapter toDoListAd = new ToDoListAdapter(toDoList);
+        ToDoListAdapter toDoListAd = new ToDoListAdapter(toDoList.returnList());
         binding.todoListView.setAdapter(toDoListAd);
         binding.todoListView.setLayoutManager(new LinearLayoutManager(getContext()));
 
@@ -66,20 +68,40 @@ private ToDoList toDoList;
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        /*binding.buttonSecond.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                NavHostFragment.findNavController(SecondFragment.this)
-                        .navigate(R.id.action_SecondFragment_to_FirstFragment);
-            }
-        });*/
-
         binding.sortByButton.setOnClickListener((v) -> {
             PopupMenu popupMenu = new PopupMenu(getContext(), v);
+            popupMenu.setOnMenuItemClickListener(this);
 //            popupMenu.setOnMenuItemClickListener(this::onTodoListSortOptionClicked);
-            popupMenu.getMenuInflater().inflate(R.menu.todo_sort_menu, popupMenu.getMenu());
-            popupMenu.show();
         });
+
+
+        binding.showCompletedButton.setOnClickListener((v) -> {
+            onClickRender(false, false);
+        });
+
+        binding.showIncompletedButton.setOnClickListener((v) -> {
+            onClickRender(false, false);
+        });
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        if (item.getItemId() == R.id.sort_by_classes) {
+            onClickRender(true, false);
+            Toast.makeText(getContext(), "fuck you", Toast.LENGTH_SHORT);
+        }
+        else
+            onClickRender(false, true);
+        return true;
+    }
+
+
+    private void onClickRender(boolean sortCourse, boolean sortDate) {
+        boolean incomplete = binding.showIncompletedButton.isChecked();
+        boolean complete = binding.showCompletedButton.isChecked();
+        ToDoListAdapter toDoListAd = new ToDoListAdapter(toDoList.returnTask(sortCourse, sortDate, complete, incomplete));
+        binding.todoListView.setAdapter(toDoListAd);
+        binding.todoListView.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
     @Override
@@ -120,4 +142,5 @@ private ToDoList toDoList;
             return false;
         }
     }
+
 }
