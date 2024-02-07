@@ -9,4 +9,13 @@
         <item>Friday</item>
         <item>Saturday</item>
     </string-array>
+    <string-array name="settings_spinner_array">
+        <item>10 Minutes</item>
+        <item>30 Minutes</item>
+        <item>1 Hour</item>
+        <item>2 Hours</item>
+        <item>1 Day</item>
+        <item>2 Days</item>
+    </string-array>
+
 </resources>

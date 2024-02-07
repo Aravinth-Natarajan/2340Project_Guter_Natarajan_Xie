@@ -47,9 +47,15 @@ public class MainActivity extends AppCompatActivity {
     private CourseViewModel selectedCourse;
     private AlarmManager alarmManager;
     private PendingIntent pendingIntent;
+    private String username;
+    private String timeToAlarm = "10 minutes";
+    private boolean newUser = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         SharedPreferences  mPrefs = getPreferences(MODE_PRIVATE);
 //        Gson gson = new Gson();
@@ -58,31 +64,21 @@ public class MainActivity extends AppCompatActivity {
 //        courses = gson.fromJson(json, courses.getClass());
 //        Log.e("Course list info", courses.getClass().getSimpleName());
 //        Log.e("Course list info", courses.get(0).getClass().getSimpleName());
-        String connectionsJSONString = getPreferences(MODE_PRIVATE).getString("MyObject", null);
-        Type type = new TypeToken<ArrayList<Course>>() {}.getType();
-        ArrayList<Course> loadedCourses = new Gson().fromJson(connectionsJSONString, type);
-        courses = loadedCourses == null ? new ArrayList<>() : loadedCourses;
-        printCourses();
-        setAlarm();
-
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-
-        createNotificationChannel();
-        // set up action bar
-        setSupportActionBar(binding.mainToolbar);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        drawerToggle = new ActionBarDrawerToggle(this, binding.drawerLayout, binding.mainToolbar, R.string.app_name, R.string.app_name);
-        drawerToggle.syncState();
-
-        // Set fragment manager and display home fragment
         fragManager = getSupportFragmentManager();
-        swapToFragment(new ClassesFragment(courses));
-        setTitle(R.string.classes_fragment_label);
+        swapToFragment(new LoginFragment());
+        setTitle(R.string.login_fragment_label);
 
-
+        fragManager.setFragmentResultListener(
+                "timeToAlarmUpdateKey", this,
+                (key, bundle) -> {
+                    String res = bundle.getString("timeToAlarmStateKey");
+                    try {
+                        timeToAlarm = res;
+                        Log.d("Time Prelay", timeToAlarm);
+                    } catch (Exception e) {
+                        Log.e("Menu Update Error: ", e.getStackTrace().toString());
+                    }
+                });
         fragManager.setFragmentResultListener(
                 "menuUpdateKey", this,
                 (key, bundle) -> {
@@ -90,6 +86,61 @@ public class MainActivity extends AppCompatActivity {
                     try {
                         TaskbarMenuState newState = Enum.valueOf(TaskbarMenuState.class, res);
                         setMenuState(newState);
+                    } catch (Exception e) {
+                        Log.e("Menu Update Error: ", e.getStackTrace().toString());
+                    }
+                });
+        fragManager.setFragmentResultListener(
+                "loginUpdateKey", this,
+                (key, bundle) -> {
+                    String res = bundle.getString("loginStateKey");
+                    try {
+                        username = res;
+                        String connectionsJSONString = getPreferences(MODE_PRIVATE).getString(username, null);
+                        Type type = new TypeToken<ArrayList<Course>>() {}.getType();
+                        ArrayList<Course> loadedCourses = new Gson().fromJson(connectionsJSONString, type);
+                        courses = loadedCourses == null ? new ArrayList<>() : loadedCourses;
+                        printCourses();
+                        setAlarm();
+
+
+                        createNotificationChannel();
+                        // set up action bar
+                        setSupportActionBar(binding.mainToolbar);
+                        getSupportActionBar().setDisplayShowHomeEnabled(true);
+                        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+                        getSupportActionBar().setHomeButtonEnabled(true);
+                        drawerToggle = new ActionBarDrawerToggle(this, binding.drawerLayout, binding.mainToolbar, R.string.app_name, R.string.app_name);
+                        drawerToggle.syncState();
+                        swapToFragment(new ClassesFragment(courses));
+                        setTitle(R.string.classes_fragment_label);
+                        // Set fragment manager and display home fragment
+                    } catch (Exception e) {
+                        Log.e("Menu Update Error: ", e.getStackTrace().toString());
+                    }
+                });
+        fragManager.setFragmentResultListener(
+                "registerUpdateKey", this,
+                (key, bundle) -> {
+                    String res = bundle.getString("registerStateKey");
+                    try {
+                        username = res;
+                        courses = new ArrayList<>();
+                        newUser = true;
+                        printCourses();
+                        setAlarm();
+
+                        createNotificationChannel();
+                        // set up action bar
+                        setSupportActionBar(binding.mainToolbar);
+                        getSupportActionBar().setDisplayShowHomeEnabled(true);
+                        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+                        getSupportActionBar().setHomeButtonEnabled(true);
+                        drawerToggle = new ActionBarDrawerToggle(this, binding.drawerLayout, binding.mainToolbar, R.string.app_name, R.string.app_name);
+                        drawerToggle.syncState();
+                        swapToFragment(new ClassesFragment(courses));
+                        setTitle(R.string.classes_fragment_label);
+                        // Set fragment manager and display home fragment
                     } catch (Exception e) {
                         Log.e("Menu Update Error: ", e.getStackTrace().toString());
                     }
@@ -145,6 +196,17 @@ public class MainActivity extends AppCompatActivity {
             setTitle(R.string.second_fragment_label);
             binding.drawerLayout.closeDrawers();
         });
+        binding.includeNavDrawer.swUserButton.setOnClickListener((view) -> {
+            swapToFragment(new LoginFragment());
+            setTitle(R.string.login_fragment_label);
+            binding.drawerLayout.closeDrawers();
+        });
+        binding.includeNavDrawer.settingsButton.setOnClickListener((view) -> {
+            swapToFragment(new SettingsFragment());
+            setTitle(R.string.settings_fragment_label);
+            binding.drawerLayout.closeDrawers();
+        });
+
     }
 
     @Override
@@ -313,7 +375,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences.Editor prefsEditor = mPrefs.edit();
         Gson gson = new Gson();
         String json = gson.toJson(courses);
-        prefsEditor.putString("MyObject", json);
+        prefsEditor.putString(username, json);
         prefsEditor.commit();
         Log.d("Check Save Tage", json);
         super.onDestroy();
