@@ -44,43 +44,33 @@ public class MainActivity extends AppCompatActivity {
     private TaskViewModel selectedTask;
     private AlarmManager alarmManager;
     private PendingIntent pendingIntent;
+    private String username;
+    private String timeToAlarm = "10 Minutes";
+    private boolean newUser = false;
+    private Intent starterIntent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        SharedPreferences  mPrefs = getPreferences(MODE_PRIVATE);
-//        Gson gson = new Gson();
-//        String json = mPrefs.getString("MyObject", "");
-//        Log.d("TestTag of Json", json);
-//        courses = gson.fromJson(json, courses.getClass());
-//        Log.e("Course list info", courses.getClass().getSimpleName());
-//        Log.e("Course list info", courses.get(0).getClass().getSimpleName());
-        String connectionsJSONString = getPreferences(MODE_PRIVATE).getString("MyObject", null);
-        Type type = new TypeToken<ArrayList<Course>>() {}.getType();
-        ArrayList<Course> loadedCourses = new Gson().fromJson(connectionsJSONString, type);
-        courses = loadedCourses == null ? new ArrayList<>() : loadedCourses;
-        setAlarm();
-
-        toDoList = new ToDoList();
-
+        starterIntent = getIntent();
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        createNotificationChannel();
-        // set up action bar
-        setSupportActionBar(binding.mainToolbar);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        drawerToggle = new ActionBarDrawerToggle(this, binding.drawerLayout, binding.mainToolbar, R.string.app_name, R.string.app_name);
-        drawerToggle.syncState();
-
-        // Set fragment manager and display home fragment
+        SharedPreferences  mPrefs = getPreferences(MODE_PRIVATE);
         fragManager = getSupportFragmentManager();
-        swapToFragment(new ClassesFragment(courses));
-        setTitle(R.string.classes_fragment_label);
+        swapToFragment(new LoginFragment());
+        setTitle(R.string.login_fragment_label);
 
-
+        fragManager.setFragmentResultListener(
+                "timeToAlarmUpdateKey", this,
+                (key, bundle) -> {
+                    String res = bundle.getString("timeToAlarmStateKey");
+                    try {
+                        timeToAlarm = res;
+                        Log.d("Time Prelay", timeToAlarm);
+                    } catch (Exception e) {
+                        Log.e("Menu Update Error: ", e.getStackTrace().toString());
+                    }
+                });
         fragManager.setFragmentResultListener(
                 "menuUpdateKey", this,
                 (key, bundle) -> {
@@ -92,10 +82,63 @@ public class MainActivity extends AppCompatActivity {
                         Log.e("Menu Update Error: ", e.getStackTrace().toString());
                     }
                 });
+        fragManager.setFragmentResultListener(
+                "loginUpdateKey", this,
+                (key, bundle) -> {
+                    String res = bundle.getString("loginStateKey");
+                    try {
+                        username = res;
+                        String connectionsJSONString = getPreferences(MODE_PRIVATE).getString(username, null);
+                        Type type = new TypeToken<ArrayList<Course>>() {}.getType();
+                        ArrayList<Course> loadedCourses = new Gson().fromJson(connectionsJSONString, type);
+                        courses = loadedCourses == null ? new ArrayList<>() : loadedCourses;
+                        printCourses();
+
+
+                        createNotificationChannel();
+                        // set up action bar
+                        setSupportActionBar(binding.mainToolbar);
+                        getSupportActionBar().setDisplayShowHomeEnabled(true);
+                        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+                        getSupportActionBar().setHomeButtonEnabled(true);
+                        drawerToggle = new ActionBarDrawerToggle(this, binding.drawerLayout, binding.mainToolbar, R.string.app_name, R.string.app_name);
+                        drawerToggle.syncState();
+                        swapToFragment(new ClassesFragment(courses));
+                        setTitle(R.string.classes_fragment_label);
+                        // Set fragment manager and display home fragment
+                    } catch (Exception e) {
+                        Log.e("Menu Update Error: ", e.getStackTrace().toString());
+                    }
+                });
+        fragManager.setFragmentResultListener(
+                "registerUpdateKey", this,
+                (key, bundle) -> {
+                    String res = bundle.getString("registerStateKey");
+                    try {
+                        username = res;
+                        courses = new ArrayList<>();
+                        newUser = true;
+                        printCourses();
+                        createNotificationChannel();
+                        // set up action bar
+                        setSupportActionBar(binding.mainToolbar);
+                        getSupportActionBar().setDisplayShowHomeEnabled(true);
+                        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+                        getSupportActionBar().setHomeButtonEnabled(true);
+                        drawerToggle = new ActionBarDrawerToggle(this, binding.drawerLayout, binding.mainToolbar, R.string.app_name, R.string.app_name);
+                        drawerToggle.syncState();
+                        swapToFragment(new ClassesFragment(courses));
+                        setTitle(R.string.classes_fragment_label);
+                        // Set fragment manager and display home fragment
+                    } catch (Exception e) {
+                        Log.e("Menu Update Error: ", e.getStackTrace().toString());
+                    }
+                });
 
         selectedCourse = new ViewModelProvider(this).get(CourseViewModel.class);
         selectedTask = new ViewModelProvider(this).get(TaskViewModel.class);
     }
+
     private void setAlarm() {
         long duration = SystemClock.elapsedRealtime();
         alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
@@ -103,6 +146,7 @@ public class MainActivity extends AppCompatActivity {
         pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
         //get Time in ms
         alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, duration, pendingIntent);
+        Toast.makeText(this, intent.toString(), Toast.LENGTH_SHORT).show();
         Toast.makeText(this, "Alarm Set Successfully", Toast.LENGTH_SHORT).show();
     }
     private void createNotificationChannel() {
@@ -117,7 +161,29 @@ public class MainActivity extends AppCompatActivity {
             notificationManager.createNotificationChannel(channel);
         }
     }
-
+    public void setNotification(Calendar dueDate, String title) {
+        int timeInMs;
+        if (timeToAlarm.equals("10 Minutes")) {
+            timeInMs = 60 * 10 * 1000;
+        } else if (timeToAlarm.equals("30 Minutes")) {
+            timeInMs = 60 * 30 * 1000;
+        } else if (timeToAlarm.equals("1 Hour")) {
+            timeInMs = 60 * 60 * 1000;
+        } else if (timeToAlarm.equals("2 Hours")) {
+            timeInMs = 60 * 60 * 2 * 1000;
+        } else if (timeToAlarm.equals("1 Day")) {
+            timeInMs = 60 * 60 * 1000 * 24;
+        } else {
+            timeInMs = 2 * 60 * 60 * 1000 * 24;
+        }
+        long timeForNotify = dueDate.getTimeInMillis() - timeInMs;
+        alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, AlarmReceiver.class);
+        pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+        //get Time in ms
+        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, timeForNotify, pendingIntent);
+        Toast.makeText(this, "Alarm Set Successfully", Toast.LENGTH_SHORT).show();
+    }
     @Override
     protected void onStart() {
         super.onStart();
@@ -134,6 +200,16 @@ public class MainActivity extends AppCompatActivity {
             setTitle(R.string.todo_fragment_label);
             binding.drawerLayout.closeDrawers();
         });
+        binding.includeNavDrawer.swUserButton.setOnClickListener((view) -> {
+            finish();
+            startActivity(starterIntent);
+        });
+        binding.includeNavDrawer.settingsButton.setOnClickListener((view) -> {
+            swapToFragment(new SettingsFragment());
+            setTitle(R.string.settings_fragment_label);
+            binding.drawerLayout.closeDrawers();
+        });
+
     }
 
     @Override
@@ -380,7 +456,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences.Editor prefsEditor = mPrefs.edit();
         Gson gson = new Gson();
         String json = gson.toJson(courses);
-        prefsEditor.putString("MyObject", json);
+        prefsEditor.putString(username, json);
         prefsEditor.commit();
         Log.d("Check Save Tage", json);
         super.onDestroy();

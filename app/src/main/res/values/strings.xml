@@ -3,8 +3,14 @@
     <string name="action_back_to_classes_text">Back</string>
     <!-- Strings used for fragments for navigation -->
     <string name="classes_fragment_label">Classes</string>
+<<<<<<< HEAD
     <string name="todo_fragment_label">To-do</string>
     <string name="task_editor_fragment_label">Edit task</string>
+=======
+    <string name="login_fragment_label">Log In</string>
+    <string name="settings_fragment_label">Settings</string>
+    <string name="second_fragment_label">To-do</string>
+>>>>>>> origin/VenkyDev
     <string name="next">Next</string>
     <string name="previous">Previous</string>
     <string name="nav_drawer_user_text">Welcome</string>
@@ -42,6 +48,7 @@
     <string name="remove_time_button_text">Remove</string>
     <string name="day_title_text">Day of week</string>
     <string name="action_back_to_class_from_editor_text">Back to classes</string>
+<<<<<<< HEAD
     <string name="action_back_to_tasks_from_details">Back to tasks</string>
     <string name="action_delete_task_title">Delete task</string>
     <string name="action_edit_task_title">Edit task</string>
@@ -55,4 +62,11 @@
     <string name="task_due_date_button_text">Set due date/time</string>
     <string name="task_description_title_text">Task description</string>
     <string name="task_description_hint">e.g., Go to laundry room and do laundry</string>
+=======
+    <string name="login_title_text">Log in to an account</string>
+    <string name="login_username_hint">Username</string>
+    <string name="login_button_text">Login</string>
+    <string name="register_button_text">Register</string>
+    <string name="settings_fragment_text_view_string">Set Notification Before</string>
+>>>>>>> origin/VenkyDev
 </resources>

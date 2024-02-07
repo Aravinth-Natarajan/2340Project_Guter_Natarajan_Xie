@@ -18,16 +18,20 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 public class AlarmReceiver extends BroadcastReceiver {
+
     @Override
     public void onReceive(Context context, Intent intent) {
         Toast.makeText(context, "Get Successfully", Toast.LENGTH_SHORT).show();
         Intent i = new Intent(context, TodoFragment.class);
+        String title = i.getStringExtra("TitleOfTask");
+        Toast.makeText(context, title, Toast.LENGTH_SHORT).show();
+        String timeRemaining = i.getStringExtra("TimeRemaining");
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, i, PendingIntent.FLAG_IMMUTABLE);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "venkyandroid")
                 .setSmallIcon(R.drawable.notiflogo)
-                .setContentText("Yo Whatup Beijing")
+                .setContentText(title + "\n" + "Time Remaining: " + timeRemaining)
                 .setAutoCancel(true)
                 .setDefaults(NotificationCompat.DEFAULT_ALL)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
@@ -46,7 +50,6 @@ public class AlarmReceiver extends BroadcastReceiver {
 //
 //            return;
 //        }
-
         if (ActivityCompat.checkSelfPermission(context, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
