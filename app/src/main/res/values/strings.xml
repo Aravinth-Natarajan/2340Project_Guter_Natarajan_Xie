@@ -22,4 +22,21 @@
     <string name="add_class_title">Add class</string>
     <string name="confirm_class_title">Confirm class</string>
     <string name="delete_class_title">Delete class</string>
+    <string name="add_datetime_button_text">+ Add a meeting time</string>
+    <string name="meeting_time_title_text">Meeting times</string>
+    <string name="class_name_title_text">Course name</string>
+    <string name="section_name_title_text">Section</string>
+    <string name="class_instructor_title_text">Instructor</string>
+    <string name="class_location_title_text">Location</string>
+    <string name="class_name_input_hint">e.g., CS 2340</string>
+    <string name="section_name_input_hint">e.g., A01</string>
+    <string name="class_instructor_input_hint">e.g., Feijoo Garcia</string>
+    <string name="class_location_input_hint">e.g., IC 103</string>
+    <string name="duration_input_hint">e.g., 75</string>
+    <string name="duration_title_text">Class duration (minutes)</string>
+    <string name="time_input_hint">e.g., 2:00</string>
+    <string name="time_title_text">Class time</string>
+    <string name="remove_time_button_text">Remove</string>
+    <string name="day_title_text">Day of week</string>
+    <string name="action_back_to_class_from_editor_text">Back to classes</string>
 </resources>

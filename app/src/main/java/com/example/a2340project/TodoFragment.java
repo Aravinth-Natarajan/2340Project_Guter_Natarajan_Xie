@@ -75,7 +75,7 @@ private ToDoList toDoList;
 
         binding.sortByButton.setOnClickListener((v) -> {
             PopupMenu popupMenu = new PopupMenu(getContext(), v);
-            popupMenu.setOnMenuItemClickListener(this::onTodoListSortOptionClicked);
+//            popupMenu.setOnMenuItemClickListener(this::onTodoListSortOptionClicked);
             popupMenu.getMenuInflater().inflate(R.menu.todo_sort_menu, popupMenu.getMenu());
             popupMenu.show();
         });
@@ -84,8 +84,7 @@ private ToDoList toDoList;
     @Override
     public void onStart() {
         super.onStart();
-        toDoList.returnList().sort(new TaskClassComparator());
-
+//        toDoList.returnList().sort(new TaskClassComparator());
     }
 
     @Override
@@ -99,11 +98,21 @@ private ToDoList toDoList;
 
         // TODO: implement sorting with/without completed tasks
         if (id == R.id.sort_by_classes) {
-            Snackbar.make(binding.getRoot(), "Sort by classes button", 3000).show();
+            toDoList.returnList().sort(new TaskClassComparator());
+            binding.todoListView.setAdapter(new ToDoListAdapter(toDoList));
+//            Snackbar.make(binding.getRoot(), "Sort by classes button", 3000).show();
+//            getParentFragmentManager().beginTransaction()
+//                    .replace(R.id.content_frame, new TodoFragment(toDoList))
+//                    .commit();
             return true;
         }
         else if (id == R.id.sort_by_due_date) {
-            Snackbar.make(binding.getRoot(), "Sort by due date button", 3000).show();
+            toDoList.returnList().sort(new TaskDateComparator());
+            binding.todoListView.setAdapter(new ToDoListAdapter(toDoList));
+//            Snackbar.make(binding.getRoot(), "Sort by due date button", 3000).show();
+//            getParentFragmentManager().beginTransaction()
+//                    .replace(R.id.content_frame, new TodoFragment(toDoList))
+//                    .commit();
             return true;
         }
         else {

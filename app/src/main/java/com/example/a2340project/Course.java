@@ -46,6 +46,22 @@ public class Course implements Comparable<Course> {
         return this.instructor;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setSection(String section) {
+        this.section = section;
+    }
+
+    public void setInstructor(String instructor) {
+        this.instructor = instructor;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
     @Override
     public String toString() {
         return name;

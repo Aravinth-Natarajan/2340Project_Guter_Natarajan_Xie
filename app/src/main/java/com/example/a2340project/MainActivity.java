@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
@@ -24,8 +25,6 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private FragmentManager fragManager;
     private ActionBarDrawerToggle drawerToggle;
-    private ClassesFragment activeClassesFragment;
-    private TodoFragment activeTodoFragment;
     private ArrayList<Course> courses;
     private ToDoList toDoList;
     private TaskbarMenuState menuState = TaskbarMenuState.HIDE_MENU;
@@ -106,25 +105,37 @@ public class MainActivity extends AppCompatActivity {
 //
         switch(menuState) {
             case CLASS_LIST:
+                binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+                drawerToggle.setDrawerIndicatorEnabled(true);
                 visible = new MenuItem[]{menu.findItem(R.id.action_add_class)};
                 break;
             case TASK_LIST:
+                binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+                drawerToggle.setDrawerIndicatorEnabled(true);
                 visible = new MenuItem[]{menu.findItem(R.id.action_add_task)};
                 break;
             case VIEW_CLASS:
+                binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+                drawerToggle.setDrawerIndicatorEnabled(false);
                 visible = new MenuItem[]{
                         menu.findItem(R.id.action_edit_class),
-                        menu.findItem(R.id.action_back_to_classes),
+                        menu.findItem(R.id.action_back_to_classes_from_details),
                         menu.findItem(R.id.action_delete_class)};
                 break;
             case EDIT_CLASS:
+                binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+                drawerToggle.setDrawerIndicatorEnabled(false);
                 visible = new MenuItem[]{
                         menu.findItem(R.id.action_confirm_class),
-                        menu.findItem(R.id.action_back_to_classes)};
+                        menu.findItem(R.id.action_back_to_classes_from_editor)};
                 break;
             case VIEW_TASK:
+                binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+                drawerToggle.setDrawerIndicatorEnabled(false);
                 break;
             case EDIT_TASK:
+                binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+                drawerToggle.setDrawerIndicatorEnabled(false);
                 break;
             case HIDE_MENU:
             default:
@@ -146,20 +157,22 @@ public class MainActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        if (id == R.id.action_back_to_classes) {
+        if (id == R.id.action_back_to_classes_from_details) {
             selectedCourse.setCourse(null);
             swapToFragment(new ClassesFragment(courses));
             setTitle(R.string.classes_fragment_label);
+        } else if (id == R.id.action_back_to_classes_from_editor) {
+            makeClassDiscardDialog();
         } else if (id == R.id.action_edit_class) {
-            swapToFragment(new ClassEditorFragment(selectedCourse.getCourse().getValue()));
+            swapToFragment(new ClassEditorFragment(selectedCourse.getCourse().getValue(), false));
             setTitle(R.string.course_editing_fragment_label);
         } else if (id == R.id.action_confirm_class) {
             makeClassConfirmationDialog();
         } else if (id == R.id.action_add_class) {
-            Course newCourse = new Course("");
+            Course newCourse = new Course("Unknown");
             selectedCourse.setCourse(newCourse);
             selectedCourse.setIsNew(true);
-            swapToFragment(new ClassEditorFragment(newCourse));
+            swapToFragment(new ClassEditorFragment(newCourse, true));
         } else if (id == R.id.action_delete_class) {
             makeClassDeletionDialog();
         }
@@ -223,6 +236,22 @@ public class MainActivity extends AppCompatActivity {
         builder.setNegativeButton("No", (dialog, id) -> {});
         builder.create().show();
     }
+
+    private void makeClassDiscardDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Wait!");
+        builder.setMessage("Are you sure you want to discard this class?");
+        builder.setPositiveButton("Yes",
+                (dialog, id) -> {
+                    selectedCourse.setCourse(null);
+                    selectedCourse.setIsNew(false);
+                    swapToFragment(new ClassesFragment(courses));
+                    setTitle(R.string.classes_fragment_label);
+                });
+        builder.setNegativeButton("No", (dialog, id) -> {});
+        builder.create().show();
+    }
+
     private void printCourses() {
         for (Course course : courses) {
             Log.e("courses List:", course.toString());

@@ -29,7 +29,12 @@
         android:icon="@drawable/done_icon"
         app:showAsAction="always" />
     <item
-        android:id="@+id/action_back_to_classes"
+        android:id="@+id/action_back_to_classes_from_editor"
+        android:title="@string/action_back_to_class_from_editor_text"
+        android:icon="@drawable/close_icon"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/action_back_to_classes_from_details"
         android:title="@string/action_back_to_classes_text"
         android:icon="@drawable/close_icon"
         app:showAsAction="always" />
