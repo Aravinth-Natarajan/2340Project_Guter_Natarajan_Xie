@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private FragmentManager fragManager;
     private ActionBarDrawerToggle drawerToggle;
-    private ArrayList<Course> courses = new ArrayList<>();
+    private ArrayList<Course> courses;
     private ToDoList toDoList;
     private TaskbarMenuState menuState = TaskbarMenuState.HIDE_MENU;
     private CourseViewModel selectedCourse;
@@ -59,10 +59,12 @@ public class MainActivity extends AppCompatActivity {
 //        Log.e("Course list info", courses.getClass().getSimpleName());
 //        Log.e("Course list info", courses.get(0).getClass().getSimpleName());
         String connectionsJSONString = getPreferences(MODE_PRIVATE).getString("MyObject", null);
-        Type type = new TypeToken<ArrayList< Course >>() {}.getType();
-        courses = new Gson().fromJson(connectionsJSONString, type);
+        Type type = new TypeToken<ArrayList<Course>>() {}.getType();
+        ArrayList<Course> loadedCourses = new Gson().fromJson(connectionsJSONString, type);
+        courses = loadedCourses == null ? new ArrayList<>() : loadedCourses;
         printCourses();
         setAlarm();
+
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
