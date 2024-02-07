@@ -84,7 +84,7 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ToDoLi
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
         viewHolder.getTextView().setText(taskList.returnList().get(position).getTitle());
-//        viewHolder.getTextView2().setText(taskList.returnList().get(position).getTitle());
+        viewHolder.getTextView2().setText(taskList.returnList().get(position).getDueDateString());
         viewHolder.getTextView3().setText(taskList.returnList().get(position).getDescription());
         viewHolder.getCon().setBackgroundColor(viewHolder.getRandomColor());
     }

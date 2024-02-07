@@ -1,5 +1,14 @@
 package com.example.a2340project;
 
+import android.annotation.SuppressLint;
+import android.app.AlarmManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -11,13 +20,20 @@ import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.ui.AppBarConfiguration;
 
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.a2340project.databinding.ActivityMainBinding;
+import com.example.a2340project.databinding.ClassesFragmentBinding;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -25,19 +41,32 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private FragmentManager fragManager;
     private ActionBarDrawerToggle drawerToggle;
-    private ArrayList<Course> courses;
+    private ArrayList<Course> courses = new ArrayList<>();
     private ToDoList toDoList;
     private TaskbarMenuState menuState = TaskbarMenuState.HIDE_MENU;
     private CourseViewModel selectedCourse;
-
-
+    private AlarmManager alarmManager;
+    private PendingIntent pendingIntent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        SharedPreferences  mPrefs = getPreferences(MODE_PRIVATE);
+//        Gson gson = new Gson();
+//        String json = mPrefs.getString("MyObject", "");
+//        Log.d("TestTag of Json", json);
+//        courses = gson.fromJson(json, courses.getClass());
+//        Log.e("Course list info", courses.getClass().getSimpleName());
+//        Log.e("Course list info", courses.get(0).getClass().getSimpleName());
+        String connectionsJSONString = getPreferences(MODE_PRIVATE).getString("MyObject", null);
+        Type type = new TypeToken<ArrayList< Course >>() {}.getType();
+        courses = new Gson().fromJson(connectionsJSONString, type);
+        printCourses();
+        setAlarm();
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        createNotificationChannel();
         // set up action bar
         setSupportActionBar(binding.mainToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -45,8 +74,6 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
         drawerToggle = new ActionBarDrawerToggle(this, binding.drawerLayout, binding.mainToolbar, R.string.app_name, R.string.app_name);
         drawerToggle.syncState();
-
-        courses = new ArrayList<>();
 
         // Set fragment manager and display home fragment
         fragManager = getSupportFragmentManager();
@@ -77,6 +104,27 @@ public class MainActivity extends AppCompatActivity {
 //
 //        // set up navigation drawer
 //        NavigationUI.setupWithNavController(binding.mainNavView, navController);
+    }
+    private void setAlarm() {
+        long duration = SystemClock.elapsedRealtime();
+        alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, AlarmReceiver.class);
+        pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+        //get Time in ms
+        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, duration, pendingIntent);
+        Toast.makeText(this, "Alarm Set Successfully", Toast.LENGTH_SHORT).show();
+    }
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "Wazzup Beijing";
+            String description = "Today on the news";
+            int importance = NotificationManager.IMPORTANCE_HIGH;
+            NotificationChannel channel = new NotificationChannel("venkyandroid", name, importance);
+            channel.setDescription(description);
+
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
     }
 
     @Override
@@ -256,5 +304,16 @@ public class MainActivity extends AppCompatActivity {
         for (Course course : courses) {
             Log.e("courses List:", course.toString());
         }
+    }
+
+    public void onDestroy() {
+        SharedPreferences  mPrefs = getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor prefsEditor = mPrefs.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(courses);
+        prefsEditor.putString("MyObject", json);
+        prefsEditor.commit();
+        Log.d("Check Save Tage", json);
+        super.onDestroy();
     }
 }
