@@ -46,8 +46,8 @@ public class LoginFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Bundle menuUpdate = new Bundle();
-                menuUpdate.putString("loginStateKey", binding.loginUsernameInput.getText().toString());
-                getParentFragmentManager().setFragmentResult("loginUpdateKey", menuUpdate);
+                menuUpdate.putString("registerStateKey", binding.loginUsernameInput.getText().toString());
+                getParentFragmentManager().setFragmentResult("registerUpdateKey", menuUpdate);
             }
         });
     }

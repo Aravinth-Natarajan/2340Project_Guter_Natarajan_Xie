@@ -50,10 +50,11 @@ public class MainActivity extends AppCompatActivity {
     private String username;
     private String timeToAlarm = "10 minutes";
     private boolean newUser = false;
+    private Intent starterIntent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        starterIntent = getIntent();
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -197,9 +198,8 @@ public class MainActivity extends AppCompatActivity {
             binding.drawerLayout.closeDrawers();
         });
         binding.includeNavDrawer.swUserButton.setOnClickListener((view) -> {
-            swapToFragment(new LoginFragment());
-            setTitle(R.string.login_fragment_label);
-            binding.drawerLayout.closeDrawers();
+            finish();
+            startActivity(starterIntent);
         });
         binding.includeNavDrawer.settingsButton.setOnClickListener((view) -> {
             swapToFragment(new SettingsFragment());
