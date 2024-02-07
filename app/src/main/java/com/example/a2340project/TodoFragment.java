@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Comparator;
 
-public class TodoFragment extends Fragment {
+public class TodoFragment extends Fragment implements PopupMenu.OnMenuItemClickListener {
 
 private TodoFragmentBinding binding;
 
@@ -47,7 +47,7 @@ private ToDoList toDoList;
 
         MainActivity.updateMenu(getParentFragmentManager(), TaskbarMenuState.TASK_LIST);
 
-        ToDoListAdapter toDoListAd = new ToDoListAdapter(toDoList);
+        ToDoListAdapter toDoListAd = new ToDoListAdapter(toDoList.returnList());
         binding.todoListView.setAdapter(toDoListAd);
         binding.todoListView.setLayoutManager(new LinearLayoutManager(getContext()));
 
@@ -57,20 +57,41 @@ private ToDoList toDoList;
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        /*binding.buttonSecond.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                NavHostFragment.findNavController(SecondFragment.this)
-                        .navigate(R.id.action_SecondFragment_to_FirstFragment);
-            }
-        });*/
-
         binding.sortByButton.setOnClickListener((v) -> {
             PopupMenu popupMenu = new PopupMenu(getContext(), v);
-//            popupMenu.setOnMenuItemClickListener(this::onTodoListSortOptionClicked);
+            popupMenu.setOnMenuItemClickListener(this);
             popupMenu.getMenuInflater().inflate(R.menu.todo_sort_menu, popupMenu.getMenu());
             popupMenu.show();
+//            popupMenu.setOnMenuItemClickListener(this::onTodoListSortOptionClicked);
         });
+
+
+        binding.showCompletedButton.setOnClickListener((v) -> {
+            onClickRender(false, false);
+        });
+
+        binding.showIncompletedButton.setOnClickListener((v) -> {
+            onClickRender(false, false);
+        });
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        if (item.getItemId() == R.id.sort_by_classes) {
+            onClickRender(true, false);
+        }
+        else
+            onClickRender(false, true);
+        return true;
+    }
+
+
+    private void onClickRender(boolean sortCourse, boolean sortDate) {
+        boolean incomplete = binding.showIncompletedButton.isChecked();
+        boolean complete = binding.showCompletedButton.isChecked();
+        ToDoListAdapter toDoListAd = new ToDoListAdapter(toDoList.returnTask(sortCourse, sortDate, complete, incomplete));
+        binding.todoListView.setAdapter(toDoListAd);
+        binding.todoListView.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
     @Override
@@ -85,30 +106,4 @@ private ToDoList toDoList;
         binding = null;
     }
 
-    private boolean onTodoListSortOptionClicked(MenuItem option) {
-        int id = option.getItemId();
-
-        // TODO: implement sorting with/without completed tasks
-        if (id == R.id.sort_by_classes) {
-            toDoList.returnList().sort(new TaskClassComparator());
-            binding.todoListView.setAdapter(new ToDoListAdapter(toDoList));
-//            Snackbar.make(binding.getRoot(), "Sort by classes button", 3000).show();
-//            getParentFragmentManager().beginTransaction()
-//                    .replace(R.id.content_frame, new TodoFragment(toDoList))
-//                    .commit();
-            return true;
-        }
-        else if (id == R.id.sort_by_due_date) {
-            toDoList.returnList().sort(new TaskDateComparator());
-            binding.todoListView.setAdapter(new ToDoListAdapter(toDoList));
-//            Snackbar.make(binding.getRoot(), "Sort by due date button", 3000).show();
-//            getParentFragmentManager().beginTransaction()
-//                    .replace(R.id.content_frame, new TodoFragment(toDoList))
-//                    .commit();
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
 }

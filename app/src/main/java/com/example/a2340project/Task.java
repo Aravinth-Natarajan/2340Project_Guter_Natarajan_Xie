@@ -37,6 +37,11 @@ public class Task {
         this(title, Calendar.getInstance(), description, course, location);
         dueDate.set(YEAR, month, date, hourOfDay, minute);
     }
+
+    public Task(String title, int year, int month, int date, int hourOfDay, int minute, String description, Course course, String location) {
+        this(title, Calendar.getInstance(), description, course, location);
+        dueDate.set(year, month, date, hourOfDay, minute);
+    }
     public Task(String title, String description) {
         this(title, Calendar.getInstance(), description);
 
@@ -44,6 +49,10 @@ public class Task {
 
     public void setCompletion(boolean status) {
         this.check = status;
+    }
+
+    public void setCheck() {
+        this.check = !this.check;
     }
     public boolean getChecked() {
         return this.check;
@@ -57,6 +66,10 @@ public class Task {
         return dueDate;
     }
 
+    public int getYear() {
+        return dueDate.get(Calendar.YEAR);
+    }
+
     public int getMonth() {
         return dueDate.get(Calendar.MONTH);
     }
@@ -65,12 +78,21 @@ public class Task {
         return dueDate.get(Calendar.DATE);
     }
 
+    public void setDueDate(int year, int month, int date, int hourOfDay, int minute) {
+        dueDate.set(year, month, date, hourOfDay, minute);
+    }
+
+    public void setDueDate(int month, int date, int hourOfDay, int minute) {
+        dueDate.set(YEAR, month, date, hourOfDay, minute);
+    }
+
+
     public String getTime() {
         return String.format("%d:%d", dueDate.get(Calendar.HOUR_OF_DAY), dueDate.get(Calendar.MINUTE));
     }
 
     public String getDueDateString() {
-        return String.format("Due Date: %d/%d %s", getMonth(), getDate(), getTime());
+        return String.format("Due Date: %d/%d/%d %s", getYear(), getMonth(), getDate(), getTime());
     }
 
     public String getDescription() {
