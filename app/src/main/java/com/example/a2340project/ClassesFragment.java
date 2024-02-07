@@ -39,17 +39,17 @@ public class ClassesFragment extends Fragment {
         layoutManager = new LinearLayoutManager(getActivity());
 
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            ArrayList<ClassTime> gerardTimes = new ArrayList<>();
-            gerardTimes.add(new ClassTime(DayOfWeek.MONDAY, "9:00 AM", 75));
-            gerardTimes.add(new ClassTime(DayOfWeek.WEDNESDAY, "9:00 AM", 75));
-            gerardTimes.add(new ClassTime(DayOfWeek.FRIDAY, "6:00 PM", 157));
-            courses.add(new Course(
-                    "CS 3511", gerardTimes, "Howey", "Gerard", "goated"
-                    ));
-        }
-        courses.add(new Course("Test course 2", "Brent Key", "L"));
-        courses.add(new Course("Test course 3", "Super Bowl", "Tom Brady"));
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            ArrayList<ClassTime> gerardTimes = new ArrayList<>();
+//            gerardTimes.add(new ClassTime(DayOfWeek.MONDAY, "9:00 AM", 75));
+//            gerardTimes.add(new ClassTime(DayOfWeek.WEDNESDAY, "9:00 AM", 75));
+//            gerardTimes.add(new ClassTime(DayOfWeek.FRIDAY, "6:00 PM", 157));
+//            courses.add(new Course(
+//                    "CS 3511", gerardTimes, "Howey", "Gerard", "goated"
+//                    ));
+//        }
+//        courses.add(new Course("Test course 2", "Brent Key", "L"));
+//        courses.add(new Course("Test course 3", "Super Bowl", "Tom Brady"));
 
         ClassListAdapter classListAdapter = new ClassListAdapter(courses, getActivity().getSupportFragmentManager());
         binding.courseListView.setAdapter(classListAdapter);

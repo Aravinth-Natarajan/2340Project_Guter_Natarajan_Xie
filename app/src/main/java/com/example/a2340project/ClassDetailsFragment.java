@@ -29,10 +29,10 @@ public class ClassDetailsFragment extends Fragment {
 
         binding = ClassDetailsBinding.inflate(inflater, container, false);
 
-        AppCompatActivity mainActivity = (AppCompatActivity) getActivity();
-        ActionBar actionBar = mainActivity.getSupportActionBar();
-        actionBar.setDisplayShowHomeEnabled(false);
-        actionBar.setHomeButtonEnabled(false);
+//        AppCompatActivity mainActivity = (AppCompatActivity) getActivity();
+//        ActionBar actionBar = mainActivity.getSupportActionBar();
+//        actionBar.setDisplayShowHomeEnabled(false);
+//        actionBar.setHomeButtonEnabled(false);
 
         MainActivity.updateMenu(getParentFragmentManager(), TaskbarMenuState.VIEW_CLASS);
 
