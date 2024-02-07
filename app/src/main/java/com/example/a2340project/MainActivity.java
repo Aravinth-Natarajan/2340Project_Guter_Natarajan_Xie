@@ -33,6 +33,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -48,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
     private AlarmManager alarmManager;
     private PendingIntent pendingIntent;
     private String username;
-    private String timeToAlarm = "10 minutes";
+    private String timeToAlarm = "10 Minutes";
     private boolean newUser = false;
     private Intent starterIntent;
     @Override
@@ -102,7 +103,6 @@ public class MainActivity extends AppCompatActivity {
                         ArrayList<Course> loadedCourses = new Gson().fromJson(connectionsJSONString, type);
                         courses = loadedCourses == null ? new ArrayList<>() : loadedCourses;
                         printCourses();
-                        setAlarm();
 
 
                         createNotificationChannel();
@@ -129,8 +129,6 @@ public class MainActivity extends AppCompatActivity {
                         courses = new ArrayList<>();
                         newUser = true;
                         printCourses();
-                        setAlarm();
-
                         createNotificationChannel();
                         // set up action bar
                         setSupportActionBar(binding.mainToolbar);
@@ -159,6 +157,7 @@ public class MainActivity extends AppCompatActivity {
 //        // set up navigation drawer
 //        NavigationUI.setupWithNavController(binding.mainNavView, navController);
     }
+
     private void setAlarm() {
         long duration = SystemClock.elapsedRealtime();
         alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
@@ -166,6 +165,7 @@ public class MainActivity extends AppCompatActivity {
         pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
         //get Time in ms
         alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, duration, pendingIntent);
+        Toast.makeText(this, intent.toString(), Toast.LENGTH_SHORT).show();
         Toast.makeText(this, "Alarm Set Successfully", Toast.LENGTH_SHORT).show();
     }
     private void createNotificationChannel() {
@@ -180,7 +180,29 @@ public class MainActivity extends AppCompatActivity {
             notificationManager.createNotificationChannel(channel);
         }
     }
-
+    public void setNotification(Calendar dueDate, String title) {
+        int timeInMs;
+        if (timeToAlarm.equals("10 Minutes")) {
+            timeInMs = 60 * 10 * 1000;
+        } else if (timeToAlarm.equals("30 Minutes")) {
+            timeInMs = 60 * 30 * 1000;
+        } else if (timeToAlarm.equals("1 Hour")) {
+            timeInMs = 60 * 60 * 1000;
+        } else if (timeToAlarm.equals("2 Hours")) {
+            timeInMs = 60 * 60 * 2 * 1000;
+        } else if (timeToAlarm.equals("1 Day")) {
+            timeInMs = 60 * 60 * 1000 * 24;
+        } else {
+            timeInMs = 2 * 60 * 60 * 1000 * 24;
+        }
+        long timeForNotify = dueDate.getTimeInMillis() - timeInMs;
+        alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, AlarmReceiver.class);
+        pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+        //get Time in ms
+        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, timeForNotify, pendingIntent);
+        Toast.makeText(this, "Alarm Set Successfully", Toast.LENGTH_SHORT).show();
+    }
     @Override
     protected void onStart() {
         super.onStart();

@@ -1,11 +1,13 @@
 package com.example.a2340project;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupMenu;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -44,17 +46,6 @@ private ToDoList toDoList;
         incompleteTasks = new ArrayList<>();
 
         MainActivity.updateMenu(getParentFragmentManager(), TaskbarMenuState.TASK_LIST);
-
-        Course test1Course = new Course("B3511");
-        Course test2Course = new Course("Z2200");
-        Course test3Course = new Course("H4641");
-
-        toDoList = new ToDoList();
-        toDoList.addTask(new Task("Done", Calendar.getInstance(), "Jaosdija Hi", test3Course));
-        toDoList.addTask(new Task("Done2", Calendar.getInstance(), "Venky Hi", test1Course));
-        toDoList.addTask(new Task("Currently working", 7, 24, 6, 30, "Jaosdija Hi", test2Course, "Klaus"));
-        toDoList.addTask(new Task("AAAAAYyyyy", Calendar.getInstance(), "Jaosdija Hi"));
-        toDoList.addTask(new Task("Get This project Done Earlier", Calendar.getInstance(), "Jaosdija Hi"));
 
         ToDoListAdapter toDoListAd = new ToDoListAdapter(toDoList);
         binding.todoListView.setAdapter(toDoListAd);
