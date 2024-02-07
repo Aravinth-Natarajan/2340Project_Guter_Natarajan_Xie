@@ -71,6 +71,8 @@ private ToDoList toDoList;
         binding.sortByButton.setOnClickListener((v) -> {
             PopupMenu popupMenu = new PopupMenu(getContext(), v);
             popupMenu.setOnMenuItemClickListener(this);
+            popupMenu.getMenuInflater().inflate(R.menu.todo_sort_menu, popupMenu.getMenu());
+            popupMenu.show();
 //            popupMenu.setOnMenuItemClickListener(this::onTodoListSortOptionClicked);
         });
 
@@ -88,7 +90,6 @@ private ToDoList toDoList;
     public boolean onMenuItemClick(MenuItem item) {
         if (item.getItemId() == R.id.sort_by_classes) {
             onClickRender(true, false);
-            Toast.makeText(getContext(), "fuck you", Toast.LENGTH_SHORT);
         }
         else
             onClickRender(false, true);
@@ -114,33 +115,6 @@ private ToDoList toDoList;
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
-    }
-
-    private boolean onTodoListSortOptionClicked(MenuItem option) {
-        int id = option.getItemId();
-
-        // TODO: implement sorting with/without completed tasks
-        if (id == R.id.sort_by_classes) {
-            toDoList.returnList().sort(new TaskClassComparator());
-            binding.todoListView.setAdapter(new ToDoListAdapter(toDoList));
-//            Snackbar.make(binding.getRoot(), "Sort by classes button", 3000).show();
-//            getParentFragmentManager().beginTransaction()
-//                    .replace(R.id.content_frame, new TodoFragment(toDoList))
-//                    .commit();
-            return true;
-        }
-        else if (id == R.id.sort_by_due_date) {
-            toDoList.returnList().sort(new TaskDateComparator());
-            binding.todoListView.setAdapter(new ToDoListAdapter(toDoList));
-//            Snackbar.make(binding.getRoot(), "Sort by due date button", 3000).show();
-//            getParentFragmentManager().beginTransaction()
-//                    .replace(R.id.content_frame, new TodoFragment(toDoList))
-//                    .commit();
-            return true;
-        }
-        else {
-            return false;
-        }
     }
 
 }
