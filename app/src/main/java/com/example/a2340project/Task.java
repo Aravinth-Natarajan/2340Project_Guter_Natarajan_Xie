@@ -8,12 +8,12 @@ import java.util.UUID;
 import java.util.Date;
 import java.util.Calendar;
 public class Task {
-    String title;
-    Calendar dueDate;
-    String description;
-    String uniqueID;
-    String location;
-    Course course;
+    private String title;
+    private Calendar dueDate;
+    private String description;
+    private String location;
+    private Course course;
+    private String taskType;
     final int YEAR = 2024;
 
     private boolean check = false;
@@ -25,9 +25,9 @@ public class Task {
         this.description = description;
         this.dueDate = dueDate;
         this.title = title;
-        this.uniqueID = UUID.randomUUID().toString();
         this.course = course;
         this.location = location;
+        this.taskType = "Task";
     }
     public Task(String title, Calendar dueDate, String description, Course course) {
         this(title, dueDate, description, course, "");
@@ -62,6 +62,10 @@ public class Task {
         return title;
     }
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     public Calendar getDueDate() {
         return dueDate;
     }
@@ -88,26 +92,34 @@ public class Task {
 
 
     public String getTime() {
-        return String.format("%d:%d", dueDate.get(Calendar.HOUR_OF_DAY), dueDate.get(Calendar.MINUTE));
+        return String.format("%d:%02d", dueDate.get(Calendar.HOUR_OF_DAY), dueDate.get(Calendar.MINUTE));
     }
 
     public String getDueDateString() {
-        return String.format("Due Date: %d/%d/%d %s", getYear(), getMonth(), getDate(), getTime());
+        return String.format("Due Date: %d/%d/%d %s", getYear(), getMonth() + 1, getDate(), getTime());
     }
 
     public String getDescription() {
         return description;
     }
 
-    public String getUniqueID() {
-        return uniqueID;
+    public void setDescription(String description) {
+        this.description = description;
     }
+
     public Course getCourse() {
         return course;
     }
 
-//    public String getUIDescription() {
-//
-//    }
+    public void setCourse(Course course) {
+        this.course = course;
+    }
 
+    public String getTaskType() {
+        return taskType;
+    }
+
+    public void setTaskType(String taskType) {
+        this.taskType = taskType;
+    }
 }

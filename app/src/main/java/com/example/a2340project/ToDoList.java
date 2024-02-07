@@ -18,15 +18,7 @@ public class ToDoList {
         tasks.add(taskToAdd);
     }
     public void removeTask(Task taskToRemove) {
-        if (tasks.size() == 0) {
-            return;
-        }
-        for(int i = 0; i < tasks.size(); i++) {
-            if (taskToRemove.uniqueID.equals(tasks.get(i).uniqueID)) {
-                tasks.remove(i);
-                break;
-            }
-        }
+        tasks.remove(taskToRemove);
     }
     public List<Task> returnList() {
         return tasks;

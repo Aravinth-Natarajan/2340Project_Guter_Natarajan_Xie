@@ -13,21 +13,45 @@
         android:icon="@drawable/add_icon"
         app:showAsAction="always"/>
     <item
+        android:id="@+id/action_edit_task"
+        android:title="@string/action_edit_task_title"
+        android:icon="@drawable/edit_icon"
+        app:showAsAction="always"/>
+    <item
         android:id="@+id/action_edit_class"
         android:title="@string/action_edit_classes_text"
         android:icon="@drawable/edit_icon"
         app:showAsAction="always"/>
     <item
+        android:id="@+id/action_delete_task"
+        android:title="@string/action_delete_task_title"
+        android:icon="@drawable/delete_icon"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/action_confirm_task"
+        android:title="@string/action_confirm_task_title"
+        android:icon="@drawable/done_icon"
+        app:showAsAction="always" />
+    <item
         android:id="@+id/action_delete_class"
         android:title="@string/delete_class_title"
         android:icon="@drawable/delete_icon"
         app:showAsAction="always"/>
-
     <item
         android:id="@+id/action_confirm_class"
         android:title="@string/confirm_class_title"
         android:icon="@drawable/done_icon"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/action_back_to_tasks_from_editor"
+        android:title="@string/action_back_to_tasks_from_editor_title"
+        android:icon="@drawable/close_icon"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/action_back_to_tasks_from_details"
+        android:title="@string/action_back_to_tasks_from_details"
+        android:icon="@drawable/close_icon"
+        app:showAsAction="always"/>
     <item
         android:id="@+id/action_back_to_classes_from_editor"
         android:title="@string/action_back_to_class_from_editor_text"

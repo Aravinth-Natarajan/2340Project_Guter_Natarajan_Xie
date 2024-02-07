@@ -9,6 +9,7 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
@@ -17,6 +18,7 @@ import java.util.Random;
 public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ToDoListViewHolder> {
 
     private List<Task> taskList;
+    private FragmentManager fragManager;
 
     /**
      * Provide a reference to the type of views that you are using
@@ -24,6 +26,7 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ToDoLi
      */
 
     public static class ToDoListViewHolder extends RecyclerView.ViewHolder {
+        private final View root;
         private final TextView textViewTitle;
         private final TextView textViewDueDate;
         private final TextView textViewDescription;
@@ -37,6 +40,7 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ToDoLi
 
         public ToDoListViewHolder(View view) {
             super(view);
+            root = view;
             // Define click listener for the ViewHolder's View
             con = view.findViewById(R.id.todo_list_card_view);
             textViewTitle = view.findViewById(R.id.todo_list_item_title);
@@ -62,6 +66,9 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ToDoLi
             return con;
         }
         public CheckBox getCheck() {return checkBox; }
+        public View getRoot() {
+            return root;
+        }
     }
 
     /**
@@ -70,8 +77,9 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ToDoLi
      * @param taskList ArrayList containing the data to populate views to be used
      * by RecyclerView
      */
-    public ToDoListAdapter(List<Task> taskList) {
+    public ToDoListAdapter(List<Task> taskList, FragmentManager fragManager) {
         this.taskList = taskList;
+        this.fragManager = fragManager;
     }
 
     // Create new views (invoked by the layout manager)
@@ -90,17 +98,25 @@ public class ToDoListAdapter extends RecyclerView.Adapter<ToDoListAdapter.ToDoLi
 
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
-        viewHolder.getTextViewTitle().setText(taskList.get(position).getTitle());
-        viewHolder.getTextViewDueDate().setText(taskList.get(position).getDueDateString());
-        viewHolder.getTextViewDescription().setText(taskList.get(position).getDescription());
-        if (taskList.get(position).getCourse() == null)
+        Task task = taskList.get(position);
+        viewHolder.getTextViewTitle().setText(task.getTitle());
+        viewHolder.getTextViewDueDate().setText(task.getDueDateString());
+        viewHolder.getTextViewDescription().setText(task.getDescription());
+        if (task.getCourse() == null)
             viewHolder.getTextViewCourse().setText("No Course");
         else
-            viewHolder.getTextViewCourse().setText(taskList.get(position).getCourse().toString());
+            viewHolder.getTextViewCourse().setText(task.getCourse().toString());
         viewHolder.getCon().setBackgroundColor(viewHolder.getRandomColor());
-        viewHolder.getCheck().setChecked(taskList.get(position).getChecked());
+        viewHolder.getCheck().setChecked(task.getChecked());
         viewHolder.getCheck().setOnClickListener((v) -> {
-            taskList.get(position).setCheck();
+            task.setCheck();
+        });
+
+        viewHolder.getRoot().setOnClickListener((v) -> {
+            fragManager.beginTransaction()
+                    .replace(R.id.content_frame,
+                            new ToDoDetailsFragment(task))
+                    .commit();
         });
 
     }

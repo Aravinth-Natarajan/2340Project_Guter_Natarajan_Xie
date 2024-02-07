@@ -45,11 +45,6 @@ public class ClassEditorFragment extends Fragment {
         binding = ClassEditorBinding.inflate(inflater, container, false);
         datetimeLayout = binding.datetimeListLayout;
 
-//        AppCompatActivity mainActivity = (AppCompatActivity) getActivity();
-//        ActionBar actionBar = mainActivity.getSupportActionBar();
-//        actionBar.setDisplayShowHomeEnabled(false);
-//        actionBar.setHomeButtonEnabled(false);
-
         MainActivity.updateMenu(getParentFragmentManager(), TaskbarMenuState.EDIT_CLASS);
 
         return binding.getRoot();

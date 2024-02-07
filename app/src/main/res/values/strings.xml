@@ -3,7 +3,8 @@
     <string name="action_back_to_classes_text">Back</string>
     <!-- Strings used for fragments for navigation -->
     <string name="classes_fragment_label">Classes</string>
-    <string name="second_fragment_label">To-do</string>
+    <string name="todo_fragment_label">To-do</string>
+    <string name="task_editor_fragment_label">Edit task</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
     <string name="nav_drawer_user_text">Welcome</string>
@@ -41,4 +42,17 @@
     <string name="remove_time_button_text">Remove</string>
     <string name="day_title_text">Day of week</string>
     <string name="action_back_to_class_from_editor_text">Back to classes</string>
+    <string name="action_back_to_tasks_from_details">Back to tasks</string>
+    <string name="action_delete_task_title">Delete task</string>
+    <string name="action_edit_task_title">Edit task</string>
+    <string name="action_back_to_tasks_from_editor_title">Back to tasks</string>
+    <string name="action_confirm_task_title">Confirm task</string>
+    <string name="task_name_title_text">Task name</string>
+    <string name="task_name_input_hint">e.g., Do laundry</string>
+    <string name="task_type_title_text">Task type</string>
+    <string name="task_course_title_text">Task associated course</string>
+    <string name="task_due_date_title_text">Due date</string>
+    <string name="task_due_date_button_text">Set due date/time</string>
+    <string name="task_description_title_text">Task description</string>
+    <string name="task_description_hint">e.g., Go to laundry room and do laundry</string>
 </resources>

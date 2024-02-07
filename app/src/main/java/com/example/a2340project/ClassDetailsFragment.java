@@ -58,9 +58,4 @@ public class ClassDetailsFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
     }
-
-    public void updateActiveCourse() {
-        Bundle courseBundle = new Bundle();
-
-    }
 }

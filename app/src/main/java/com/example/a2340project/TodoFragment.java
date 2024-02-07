@@ -46,19 +46,19 @@ private ToDoList toDoList;
 
         MainActivity.updateMenu(getParentFragmentManager(), TaskbarMenuState.TASK_LIST);
 
-        Course test1Course = new Course("B3511");
-        Course test2Course = new Course("Z2200");
+//        Course test1Course = new Course("B3511");
+//        Course test2Course = new Course("Z2200");
         Course test3Course = new Course("H4641");
 
-        toDoList = new ToDoList();
+//        toDoList = new ToDoList();
         toDoList.addTask(new Task("Done", Calendar.getInstance(), "Jaosdija Hi", test3Course));
-        toDoList.addTask(new Task("Done2", Calendar.getInstance(), "Venky Hi", test1Course));
-        toDoList.addTask(new Task("Currently working", 7, 24, 6, 30, "Jaosdija Hi", test2Course, "Klaus"));
-        toDoList.addTask(new Task("AAAAAYyyyy", Calendar.getInstance(), "Jaosdija Hi"));
-        toDoList.addTask(new Task("Get This project Done Earlier", Calendar.getInstance(), "Jaosdija Hi"));
-        toDoList.addTask(new Task("I amm dieing", 10, 30, 15, 45, "kms", test1Course, "cross land"));
+//        toDoList.addTask(new Task("Done2", Calendar.getInstance(), "Venky Hi", test1Course));
+//        toDoList.addTask(new Task("Currently working", 7, 24, 6, 30, "Jaosdija Hi", test2Course, "Klaus"));
+//        toDoList.addTask(new Task("AAAAAYyyyy", Calendar.getInstance(), "Jaosdija Hi"));
+//        toDoList.addTask(new Task("Get This project Done Earlier", Calendar.getInstance(), "Jaosdija Hi"));
+//        toDoList.addTask(new Task("I amm dieing", 10, 30, 15, 45, "kms", test1Course, "cross land"));
 
-        ToDoListAdapter toDoListAd = new ToDoListAdapter(toDoList.returnList());
+        ToDoListAdapter toDoListAd = new ToDoListAdapter(toDoList.returnList(), getActivity().getSupportFragmentManager());
         binding.todoListView.setAdapter(toDoListAd);
         binding.todoListView.setLayoutManager(new LinearLayoutManager(getContext()));
 
@@ -100,7 +100,7 @@ private ToDoList toDoList;
     private void onClickRender(boolean sortCourse, boolean sortDate) {
         boolean incomplete = binding.showIncompletedButton.isChecked();
         boolean complete = binding.showCompletedButton.isChecked();
-        ToDoListAdapter toDoListAd = new ToDoListAdapter(toDoList.returnTask(sortCourse, sortDate, complete, incomplete));
+        ToDoListAdapter toDoListAd = new ToDoListAdapter(toDoList.returnTask(sortCourse, sortDate, complete, incomplete), getActivity().getSupportFragmentManager());
         binding.todoListView.setAdapter(toDoListAd);
         binding.todoListView.setLayoutManager(new LinearLayoutManager(getContext()));
     }

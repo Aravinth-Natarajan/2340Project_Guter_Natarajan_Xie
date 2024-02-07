@@ -1,6 +1,5 @@
 package com.example.a2340project;
 
-import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -18,7 +17,6 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.ui.AppBarConfiguration;
 
 import android.os.SystemClock;
 import android.util.Log;
@@ -27,17 +25,15 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.example.a2340project.databinding.ActivityMainBinding;
-import com.example.a2340project.databinding.ClassesFragmentBinding;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
 
-    private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
     private FragmentManager fragManager;
     private ActionBarDrawerToggle drawerToggle;
@@ -45,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private ToDoList toDoList;
     private TaskbarMenuState menuState = TaskbarMenuState.HIDE_MENU;
     private CourseViewModel selectedCourse;
+    private TaskViewModel selectedTask;
     private AlarmManager alarmManager;
     private PendingIntent pendingIntent;
     @Override
@@ -62,8 +59,9 @@ public class MainActivity extends AppCompatActivity {
         Type type = new TypeToken<ArrayList<Course>>() {}.getType();
         ArrayList<Course> loadedCourses = new Gson().fromJson(connectionsJSONString, type);
         courses = loadedCourses == null ? new ArrayList<>() : loadedCourses;
-        printCourses();
         setAlarm();
+
+        toDoList = new ToDoList();
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -96,16 +94,7 @@ public class MainActivity extends AppCompatActivity {
                 });
 
         selectedCourse = new ViewModelProvider(this).get(CourseViewModel.class);
-
-//        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-//        appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph())
-//                .setOpenableLayout(binding.drawerLayout)
-//                .build();
-////        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-//        NavigationUI.setupWithNavController(binding.mainToolbar, navController, appBarConfiguration);
-//
-//        // set up navigation drawer
-//        NavigationUI.setupWithNavController(binding.mainNavView, navController);
+        selectedTask = new ViewModelProvider(this).get(TaskViewModel.class);
     }
     private void setAlarm() {
         long duration = SystemClock.elapsedRealtime();
@@ -142,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
 
         binding.includeNavDrawer.todoListNavButton.setOnClickListener((view) -> {
             swapToFragment(new TodoFragment(toDoList));
-            setTitle(R.string.second_fragment_label);
+            setTitle(R.string.todo_fragment_label);
             binding.drawerLayout.closeDrawers();
         });
     }
@@ -182,10 +171,17 @@ public class MainActivity extends AppCompatActivity {
             case VIEW_TASK:
                 binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
                 drawerToggle.setDrawerIndicatorEnabled(false);
+                visible = new MenuItem[]{
+                        menu.findItem(R.id.action_edit_task),
+                        menu.findItem(R.id.action_delete_task),
+                        menu.findItem(R.id.action_back_to_tasks_from_details)};
                 break;
             case EDIT_TASK:
                 binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
                 drawerToggle.setDrawerIndicatorEnabled(false);
+                visible = new MenuItem[]{
+                        menu.findItem(R.id.action_confirm_task),
+                        menu.findItem(R.id.action_back_to_tasks_from_editor)};
                 break;
             case HIDE_MENU:
             default:
@@ -223,8 +219,30 @@ public class MainActivity extends AppCompatActivity {
             selectedCourse.setCourse(newCourse);
             selectedCourse.setIsNew(true);
             swapToFragment(new ClassEditorFragment(newCourse, true));
+            setTitle(R.string.course_editing_fragment_label);
         } else if (id == R.id.action_delete_class) {
             makeClassDeletionDialog();
+        }
+
+        else if (id == R.id.action_back_to_tasks_from_details) {
+            selectedTask.setTask(null);
+            swapToFragment(new TodoFragment(toDoList));
+            setTitle(R.string.todo_fragment_label);
+        } else if (id == R.id.action_back_to_tasks_from_editor) {
+            makeTaskDiscardDialog();
+        } else if (id == R.id.action_edit_task) {
+            swapToFragment(new ToDoEditorFragment(selectedTask.getTask().getValue(), false, courses));
+            setTitle(R.string.task_editor_fragment_label);
+        } else if (id == R.id.action_confirm_task) {
+            makeTaskConfirmationDialog();
+        } else if (id == R.id.action_add_task) {
+            Task newTask = new Task("Unknown", Calendar.getInstance(), "Unknown");
+            selectedTask.setTask(newTask);
+            selectedTask.setIsNew(true);
+            swapToFragment(new ToDoEditorFragment(selectedTask.getTask().getValue(), true, courses));
+            setTitle(R.string.task_editor_fragment_label);
+        } else if (id == R.id.action_delete_task) {
+            makeTaskDeletionDialog();
         }
 
         return super.onOptionsItemSelected(item);
@@ -270,6 +288,23 @@ public class MainActivity extends AppCompatActivity {
         builder.create().show();
     }
 
+    private void makeTaskConfirmationDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Confirm changes?");
+        builder.setPositiveButton("Yes",
+                (dialog, id) -> {
+                    if (selectedTask.isNew().getValue()) {
+                        toDoList.addTask(selectedTask.getTask().getValue());
+                    }
+                    selectedTask.setTask(null);
+                    selectedTask.setIsNew(false);
+                    swapToFragment(new TodoFragment(toDoList));
+                    setTitle(R.string.todo_fragment_label);
+                });
+        builder.setNegativeButton("No", (dialog, id) -> {});
+        builder.create().show();
+    }
+
     private void makeClassDeletionDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Wait!");
@@ -287,6 +322,23 @@ public class MainActivity extends AppCompatActivity {
         builder.create().show();
     }
 
+    private void makeTaskDeletionDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Wait!");
+        builder.setMessage("Are you sure you want to delete this task?");
+        builder.setPositiveButton("Yes",
+                (dialog, id) -> {
+                    Task task = selectedTask.getTask().getValue();
+                    toDoList.removeTask(task);
+                    selectedTask.setTask(null);
+                    selectedTask.setIsNew(false);
+                    swapToFragment(new TodoFragment(toDoList));
+                    setTitle(R.string.todo_fragment_label);
+                });
+        builder.setNegativeButton("No", (dialog, id) -> {});
+        builder.create().show();
+    }
+
     private void makeClassDiscardDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Wait!");
@@ -297,6 +349,21 @@ public class MainActivity extends AppCompatActivity {
                     selectedCourse.setIsNew(false);
                     swapToFragment(new ClassesFragment(courses));
                     setTitle(R.string.classes_fragment_label);
+                });
+        builder.setNegativeButton("No", (dialog, id) -> {});
+        builder.create().show();
+    }
+
+    private void makeTaskDiscardDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Wait!");
+        builder.setMessage("Are you sure you want to discard this task?");
+        builder.setPositiveButton("Yes",
+                (dialog, id) -> {
+                    selectedTask.setTask(null);
+                    selectedTask.setIsNew(false);
+                    swapToFragment(new TodoFragment(toDoList));
+                    setTitle(R.string.todo_fragment_label);
                 });
         builder.setNegativeButton("No", (dialog, id) -> {});
         builder.create().show();
