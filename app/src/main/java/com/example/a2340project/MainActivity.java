@@ -146,6 +146,8 @@ public class MainActivity extends AppCompatActivity {
         long timeForNotify = dueDate.getTimeInMillis() - timeInMs;
         alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(this, AlarmReceiver.class);
+        intent.putExtra("TaskTitle", title);
+        intent.putExtra("TimeRemaining", timeToAlarm);
         pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
         //get Time in ms
         alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, timeForNotify, pendingIntent);
@@ -338,6 +340,7 @@ public class MainActivity extends AppCompatActivity {
         builder.setTitle("Confirm changes?");
         builder.setPositiveButton("Yes",
                 (dialog, id) -> {
+                    setNotification(selectedTask.getTask().getValue().getDueDate(), selectedTask.getTask().getValue().getTitle());
                     if (selectedTask.isNew().getValue()) {
                         toDoList.addTask(selectedTask.getTask().getValue());
                     }
