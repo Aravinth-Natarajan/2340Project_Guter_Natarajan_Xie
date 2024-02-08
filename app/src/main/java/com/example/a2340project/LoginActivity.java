@@ -45,6 +45,7 @@ public class LoginActivity extends AppCompatActivity {
         binding.loginButton.setOnClickListener(v -> {
             hideOSK();
             String userEntry = binding.loginUsernameInput.getText().toString();
+
             if (users.contains(userEntry)) {
                 launchMainActivity(userEntry);
             } else {
@@ -58,13 +59,21 @@ public class LoginActivity extends AppCompatActivity {
         binding.registerButton.setOnClickListener(v -> {
             hideOSK();
 
-            // Register new user
+            // Attempt to register new user
             String userEntry = binding.loginUsernameInput.getText().toString();
-            users.add(userEntry);
-            userNameRegisterEditor.putStringSet(USERS_KEY, users);
-            userNameRegisterEditor.apply();
 
-            launchMainActivity(userEntry);
+            if (users.contains(userEntry)) {
+                Snackbar.make(this, v.getRootView(),
+                                "Sorry, that user is already registered! Please try a different username or login.",
+                                5000)
+                        .show();
+            } else {
+                users.add(userEntry);
+                userNameRegisterEditor.putStringSet(USERS_KEY, users);
+                userNameRegisterEditor.apply();
+
+                launchMainActivity(userEntry);
+            }
         });
     }
 
