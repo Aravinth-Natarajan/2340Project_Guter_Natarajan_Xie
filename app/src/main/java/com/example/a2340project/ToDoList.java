@@ -14,6 +14,9 @@ public class ToDoList {
     public ToDoList() {
         this.tasks = new ArrayList<>();
     }
+    public ToDoList(List<Task> tasks) {
+        this.tasks = tasks;
+    }
     public void addTask(Task taskToAdd) {
         tasks.add(taskToAdd);
     }

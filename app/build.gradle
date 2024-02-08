@@ -7,7 +7,7 @@ android {
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.example.a2340project"
+        applicationId 'com.a2340.schedulerapp'
         minSdk 26
         targetSdk 34
         versionCode 1

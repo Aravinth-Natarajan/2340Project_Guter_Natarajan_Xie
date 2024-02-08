@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.a2340project.databinding.ClassesFragmentBinding;
 import com.example.a2340project.databinding.LoginFragmentBinding;
 
+// This is unused, replaced by LoginActivity
 public class LoginFragment extends Fragment {
     private LoginFragmentBinding binding;
     private LinearLayoutManager layoutManager;
