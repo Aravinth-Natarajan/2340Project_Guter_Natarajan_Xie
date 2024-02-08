@@ -19,7 +19,6 @@ import java.util.Set;
 public class LoginActivity extends AppCompatActivity {
     public static final String USERS_KEY = "USERS_KEY";
     public static final String USERNAME_KEY = "USERNAME_KEY";
-    public static final String USER_DATA_KEY = "USER_DATA_KEY";
     private ActivityLoginBinding binding;
 
     private SharedPreferences usernameRegister;

@@ -90,6 +90,9 @@ public class Task {
         dueDate.set(YEAR, month, date, hourOfDay, minute);
     }
 
+    public void setDueDate(Calendar calendar) {
+        this.dueDate = calendar;
+    }
 
     public String getTime() {
         return String.format("%d:%02d", dueDate.get(Calendar.HOUR_OF_DAY), dueDate.get(Calendar.MINUTE));

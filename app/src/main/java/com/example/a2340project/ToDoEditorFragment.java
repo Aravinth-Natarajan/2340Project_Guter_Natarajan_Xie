@@ -48,7 +48,12 @@ public class ToDoEditorFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-        Calendar taskCalendar = isNew ? Calendar.getInstance() : task.getDueDate();
+        Calendar taskCalendar;
+        if (task.getDueDate() == null) {
+            task.setDueDate(Calendar.getInstance());
+        }
+        taskCalendar = task.getDueDate();
+
 //        timePicker = new DateTimePickers.TimePickerFragment(taskCalendar);
         datePicker = new DateTimePickers.DatePickerFragment(taskCalendar);
 

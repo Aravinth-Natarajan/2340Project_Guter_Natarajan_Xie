@@ -34,6 +34,7 @@ import java.util.Calendar;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+    private static final String USER_DATA_KEY = "USER_DATA_KEY";
     private static final String COURSES_KEY_SUFFIX = "_COURSES";
     private static final String TASKS_KEY_SUFFIX = "_TASKS";
     private static final String PREFS_KEY_SUFFIX = "_PREFS";
@@ -415,7 +416,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void loadUserData() {
         username = getIntent().getStringExtra(LoginActivity.USERNAME_KEY);
-        userData = getSharedPreferences(LoginActivity.USER_DATA_KEY, MODE_PRIVATE);
+        userData = getSharedPreferences(USER_DATA_KEY, MODE_PRIVATE);
 
         String userCoursesJSONString = userData.getString(
                 username + COURSES_KEY_SUFFIX, null);
