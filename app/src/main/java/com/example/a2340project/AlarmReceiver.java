@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
 import android.widget.Toast;
@@ -23,9 +24,9 @@ public class AlarmReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         Toast.makeText(context, "Get Successfully", Toast.LENGTH_SHORT).show();
         Intent i = new Intent(context, TodoFragment.class);
-        String title = i.getStringExtra("TitleOfTask");
-        Toast.makeText(context, title, Toast.LENGTH_SHORT).show();
-        String timeRemaining = i.getStringExtra("TimeRemaining");
+        Bundle extras = intent.getExtras();
+        String title = extras.getString("TaskTitle");
+        String timeRemaining = extras.getString("TimeRemaining");
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, i, PendingIntent.FLAG_IMMUTABLE);
 
