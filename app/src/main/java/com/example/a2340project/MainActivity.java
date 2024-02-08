@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
     private AlarmManager alarmManager;
     private PendingIntent pendingIntent;
     private String username;
-    private String timeToAlarm = "10 Minutes";
+    private String timeToAlarm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -151,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
         pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
         //get Time in ms
         alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, timeForNotify, pendingIntent);
-        Toast.makeText(this, "Alarm Set Successfully", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Alarm Set Successfully", Toast.LENGTH_LONG).show();
     }
     @Override
     protected void onStart() {
@@ -174,7 +174,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(newIntent);
         });
         binding.includeNavDrawer.settingsButton.setOnClickListener((view) -> {
-            swapToFragment(new SettingsFragment());
+            swapToFragment(new SettingsFragment(timeToAlarm));
             setTitle(R.string.settings_fragment_label);
             binding.drawerLayout.closeDrawers();
         });
@@ -425,8 +425,8 @@ public class MainActivity extends AppCompatActivity {
                 username + COURSES_KEY_SUFFIX, null);
         String userTasksJSONString = userData.getString(
                 username + TASKS_KEY_SUFFIX, null);
-//        String userPrefsJSONString = userData.getString(
-//                username + PREFS_KEY_SUFFIX, null);
+        String userPrefsString = userData.getString(
+                username + PREFS_KEY_SUFFIX, null);
 
         gson = new Gson();
 
@@ -437,16 +437,18 @@ public class MainActivity extends AppCompatActivity {
         Type tasksType = new TypeToken<ArrayList<Task>>(){}.getType();
         ArrayList<Task> loadedTasks = gson.fromJson(userTasksJSONString, tasksType);
         toDoList = new ToDoList(loadedTasks == null ? new ArrayList<>() : loadedTasks);
+
+        timeToAlarm = userPrefsString == null ? "10 minutes" : userPrefsString;
     }
 
     private void saveUserData() {
         SharedPreferences.Editor dataEditor = userData.edit();
         String coursesJSON = gson.toJson(courses);
         String tasksJSON = gson.toJson(toDoList.returnList());
-//        String prefsJSON = gson.toJson()
+        String prefsString = timeToAlarm;
         dataEditor.putString(username + COURSES_KEY_SUFFIX, coursesJSON);
         dataEditor.putString(username + TASKS_KEY_SUFFIX, tasksJSON);
-//        dataEditor.putString(username + COURSES_KEY_SUFFIX, coursesJSON);
+        dataEditor.putString(username + PREFS_KEY_SUFFIX, prefsString);
         dataEditor.apply();
     }
     private void printCourses() {

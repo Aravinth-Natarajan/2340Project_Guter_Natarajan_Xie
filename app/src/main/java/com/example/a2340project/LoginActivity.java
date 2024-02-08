@@ -15,6 +15,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 public class LoginActivity extends AppCompatActivity {
     public static final String USERS_KEY = "USERS_KEY";
@@ -67,7 +68,13 @@ public class LoginActivity extends AppCompatActivity {
                                 "Sorry, that user is already registered! Please try a different username or login.",
                                 5000)
                         .show();
-            } else {
+            } else if (isInvalidXMLString(userEntry)) {
+                Snackbar.make(this, v.getRootView(),
+                                "Sorry, that username contains illegal characters! Please try a different username or login.",
+                                5000)
+                        .show();
+            }
+            else {
                 users.add(userEntry);
                 userNameRegisterEditor.putStringSet(USERS_KEY, users);
                 userNameRegisterEditor.apply();
@@ -89,5 +96,9 @@ public class LoginActivity extends AppCompatActivity {
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
+    }
+
+    private boolean isInvalidXMLString(String string) {
+        return Pattern.compile("[<>&'\"]").matcher(string).find() || string.equals("");
     }
 }

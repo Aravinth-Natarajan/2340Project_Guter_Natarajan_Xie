@@ -100,7 +100,7 @@ public class ToDoEditorFragment extends Fragment {
     public void setupTaskTypeHandler() {
         binding.taskTypeSpinner.setAdapter(
                 ArrayAdapter.createFromResource(
-                        getContext(), R.array.task_types, android.R.layout.simple_spinner_item)
+                        getContext(), R.array.task_types, android.R.layout.simple_spinner_dropdown_item)
         );
 
         if (!isNew) {
