@@ -22,15 +22,19 @@ public class AlarmReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Toast.makeText(context, "Get Successfully", Toast.LENGTH_SHORT).show();
-        Intent i = new Intent(context, TodoFragment.class);
+//        Toast.makeText(context, "Firing alarm", Toast.LENGTH_SHORT).show();
+
         Bundle extras = intent.getExtras();
         String title = extras.getString("TaskTitle");
         String timeRemaining = extras.getString("TimeRemaining");
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, i, PendingIntent.FLAG_IMMUTABLE);
+        String sourceUser = extras.getString("sourceUser");
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "venkyandroid")
+        Intent launchAppIntent = new Intent(context, MainActivity.class);
+        launchAppIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        launchAppIntent.putExtra(LoginActivity.USERNAME_KEY, sourceUser);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, launchAppIntent, PendingIntent.FLAG_MUTABLE);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, MainActivity.NOTIF_CHANNEL_ID)
                 .setSmallIcon(R.drawable.notiflogo)
                 .setContentText(title + "\n" + "Time Remaining: " + timeRemaining)
                 .setAutoCancel(true)
@@ -39,18 +43,7 @@ public class AlarmReceiver extends BroadcastReceiver {
                 .setContentIntent(pendingIntent);
 
         NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
-//        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.
-//       ) != PackageManager.PERMISSION_GRANTED) {
-//            // TODO: Consider calling
-//            // ActivityCompat#requestPermissions
-//            // here to request the missing permissions, and then overriding
-//            // public void onRequestPermissionsResult(int requestCode, String[] permissions,
-//            //                                        int[] grantResults)
-//            // to handle the case where the user grants the permission. See the documentation
-//            // for ActivityCompat#requestPermissions for more details.
-//
-//            return;
-//        }
+
         if (ActivityCompat.checkSelfPermission(context, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -59,6 +52,7 @@ public class AlarmReceiver extends BroadcastReceiver {
             //                                          int[] grantResults)
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
+            Log.e("Notifications", "Missing permission POST_NOTIFICATIONS");
             return;
         }
         notificationManagerCompat.notify(666, builder.build());

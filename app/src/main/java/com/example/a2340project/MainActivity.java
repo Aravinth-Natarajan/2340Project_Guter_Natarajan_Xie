@@ -32,12 +32,14 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
     private static final String USER_DATA_KEY = "USER_DATA_KEY";
     private static final String COURSES_KEY_SUFFIX = "_COURSES";
     private static final String TASKS_KEY_SUFFIX = "_TASKS";
     private static final String PREFS_KEY_SUFFIX = "_PREFS";
+    public static final String NOTIF_CHANNEL_ID = "scheduler_notif_channel";
 
     private ActivityMainBinding binding;
     private FragmentManager fragManager;
@@ -58,11 +60,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        if (savedInstanceState != null) {
+            username = savedInstanceState.getString(LoginActivity.USERNAME_KEY);
+        }
+
         // Inflate base layout
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         loadUserData();
+        Log.d("Logged in", "Active user: " + username);
 
         // set up action bar
         setSupportActionBar(binding.mainToolbar);
@@ -76,6 +83,8 @@ public class MainActivity extends AppCompatActivity {
         fragManager = getSupportFragmentManager();
         swapToFragment(new ClassesFragment(courses));
         setTitle(R.string.classes_fragment_label);
+
+        createNotificationChannel();
 
         fragManager.setFragmentResultListener(
                 "timeToAlarmUpdateKey", this,
@@ -118,10 +127,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = "Wazzup Beijing";
-            String description = "Today on the news";
+            CharSequence name = "Notifications for tasks";
+            String description = "Per task according to global setting";
             int importance = NotificationManager.IMPORTANCE_HIGH;
-            NotificationChannel channel = new NotificationChannel("venkyandroid", name, importance);
+            NotificationChannel channel = new NotificationChannel(NOTIF_CHANNEL_ID, name, importance);
             channel.setDescription(description);
 
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
@@ -148,10 +157,16 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, AlarmReceiver.class);
         intent.putExtra("TaskTitle", title);
         intent.putExtra("TimeRemaining", timeToAlarm);
-        pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+        intent.putExtra("sourceUser", username);
+        pendingIntent = PendingIntent.getBroadcast(
+                this,
+                (int) (Math.random() * Integer.MAX_VALUE),
+//                0,
+                intent,
+                PendingIntent.FLAG_IMMUTABLE);
         //get Time in ms
         alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, timeForNotify, pendingIntent);
-        Toast.makeText(this, "Alarm Set Successfully", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "Alarm Set Successfully", Toast.LENGTH_SHORT).show();
     }
     @Override
     protected void onStart() {
@@ -418,7 +433,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadUserData() {
-        username = getIntent().getStringExtra(LoginActivity.USERNAME_KEY);
+        username = username == null ? getIntent().getStringExtra(LoginActivity.USERNAME_KEY) : username;
         userData = getSharedPreferences(USER_DATA_KEY, MODE_PRIVATE);
 
         String userCoursesJSONString = userData.getString(
